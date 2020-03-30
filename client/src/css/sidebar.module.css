@@ -1,0 +1,25 @@
+.boardCard {
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.2), #000) ;
+    height: 50px;
+    border-radius: 3px;
+    padding: 0 20px;
+    display: flex;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.boardCard:hover {
+    background-image: linear-gradient(135deg, transparent,  rgba(255, 255, 255, 0.4));
+    transition: background-image 1s;
+}
+
+.boardList{
+    height:66%;
+    overflow: auto;
+}
+
+.hrStyle {
+    border-top: 0.1px solid #8c8b8b;
+    opacity: 0.3;
+}

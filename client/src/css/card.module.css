@@ -1,0 +1,8 @@
+.base  {
+    margin-top: 5px;
+}
+
+.override {
+    line-height: 8px;
+    overflow-wrap: break-word;
+}

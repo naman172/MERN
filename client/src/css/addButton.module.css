@@ -1,0 +1,111 @@
+.containerList {
+    cursor: pointer;
+    border-radius: 3px;
+    width : 250px;
+    min-width: 250px;  
+    padding: 8px; 
+    margin-right: 8px; 
+    font-family: 'Roboto', sans-serif;
+}
+
+.containerListDisplay {
+    display : flex;
+    flex-direction: row;
+    align-items : center;
+}
+
+.containerCard {
+    display : flex;
+    flex-direction: row;
+    align-items : center;
+    cursor: pointer;
+    border-radius: 3px;
+    height: 50px;
+    width: 225px;
+    margin-top: 8px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.containerCard:hover {
+    background-color: rgba(9,30,66,.15);
+}
+
+.containerBoard{
+    display : flex;
+    flex-direction: row;
+    align-items : center;
+    align-self: center;
+    cursor: pointer;
+    border-radius: 3px;
+    height: 45px;
+    width: 100%;
+    margin-top: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.95em;
+}
+
+.containerBoard:hover{
+    background-image: linear-gradient(135deg, transparent,  rgba(255, 255, 255, 0.25));
+    transition: background-image 1s;
+}
+
+.formBox{
+    display: inline-block;
+    background-color: #ebecf0;
+    border-radius : 3px;
+    min-width:250px;
+    width : 250px;  
+    padding: 8px; 
+    margin-right: 8px; 
+}
+
+
+.formTextarea {
+    resize: none;
+    width: 100%;
+    height: 2em;
+    border: none;
+    outline: none;
+}
+
+.formSearchBox{
+    resize: none;
+    width: 100%;
+    height: 3em;
+    border: none;
+    outline: none;
+    border-radius: 3px; 
+    padding: 0 10px;   
+    font-family: monospace;
+}
+
+.formCard {
+    margin-top: 8px;
+    min-height: 60px;
+    padding: 8px 12px 20px;
+}
+
+.formAddContainer{
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.formAddButton{
+    background: rgba(90,172,68,1);
+    color: white;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 0 8px 4px 0;
+    padding: 6px 16px;
+    text-align: center;
+    border-radius: 3px;
+    font-family: Segoe UI;
+    font-weight: 400;
+    font-size: 0.9em;
+}
