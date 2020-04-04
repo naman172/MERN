@@ -7,18 +7,19 @@ import Navbar from './Navbar.js';
 import Board from './Board.js';
 import SideBar from './Sidebar.js'
 import NoBoardsToDisplay from './NoBoardsToDisplay.js'
+import BoardBar from './BoardBar.js'
 
 import styles from "../css/home.module.css"
 import '../css/homeIndex.css'
 
-import {getBoardList, getBoard} from "../actions/index.js"
+import {getBoardList, getBoard, getCollabs} from "../actions/index.js"
 
 class Home extends Component{
     
     componentDidMount = () => {
         if(this.props.id){
             this.props.dispatch(getBoardList(this.props.id));
-            console.log()
+            this.props.dispatch(getCollabs(this.props.id));
             if(this.props.boardOnDisplay){
                 this.props.dispatch(getBoard(this.props.boardOnDisplay));
             }
@@ -30,12 +31,21 @@ class Home extends Component{
             <div className="home">
                 <div className={styles.body}>
                     <Navbar className={styles.nav} title={'trello'} history={this.props.history} buttons/>
+                    
                     {this.props.boardOnDisplay ?
-                        (<div className={styles.boardbody}>
-                            <Board id="boardContainer"/>
-                        </div>):
                         (
-                            <NoBoardsToDisplay />
+                            <div>
+                                <BoardBar/>
+                                <div className={styles.boardbody}>
+                                    <Board id="boardContainer"/>
+                                </div>
+                            </div>
+                        ):
+                        (
+                            <div style={{display:"flex", height:"100%"}}>
+                                <div style={{width:"50%"}}></div>
+                                <NoBoardsToDisplay />
+                            </div>
                         )
                     } 
                     <SideBar/>

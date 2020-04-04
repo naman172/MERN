@@ -2,20 +2,22 @@ import axios from "axios";
 
 import {Constants} from './index.js'
 import {getUserInfo} from './index.js'
+import { getCollabs } from "./collabActions.js";
 
-const changeBoard=(id, boardId)=>{
-    
+const changeBoard=(id, boardId, prevBoardId)=>{
+
     return (dispatch, getState) => {
-
         return  axios
                     .put('/user/board', {
                         id,
-                        boardId
+                        boardId,
+                        prevBoardId
                     })
                         .then(response => {
                             if (response.status === 201) {
                                 dispatch(getUserInfo(true));
-                                dispatch(getBoard(boardId))
+                                dispatch(getBoard(boardId));
+                                dispatch(getBoardList(id));
                             } 
                             else {
                                 dispatch({
@@ -90,14 +92,16 @@ const getBoardList=(id)=>{
     }
 }
 
-const addBoard = (id, title)=>{
+const addBoard = (id, title, email, boardId)=>{
 
     return (dispatch, getState) => {
 
         return  axios
                     .post('/boards', {
                         title,
-                        id
+                        id,
+                        email,
+                        boardId
                     })
                         .then(response => {
                             if (response.status === 201) {
@@ -177,10 +181,7 @@ const reorderList = (destinationIndex, draggableId, boardId)=>{
                         boardId
                     })
                         .then(response => {
-                            if (response.status === 202) {
-                                dispatch(getBoard(boardId));
-                            } 
-                            else {
+                            if (response.status !== 202) {
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
@@ -204,10 +205,7 @@ const reorderCard = (sourceId, destinationId, destinationIndex, draggableId, boa
                         draggableId,
                     })
                         .then(response => {
-                            if (response.status === 202) {
-                                dispatch(getBoard(boardId));
-                            } 
-                            else {
+                            if (response.status !== 202) {
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
@@ -244,6 +242,147 @@ const persistUpdate = (sourceDropId, sourceDropIndex, destDropId, destDropIndex,
     }
 }
 
+const deleteBoard = (id, userId)=>{
+
+    return (dispatch, getState) => {
+
+        return  axios
+                    .delete('/boards',  {
+                        params:{
+                            id
+                        }
+                    })
+                        .then(response => {
+                            if (response.status === 202) {
+                                dispatch(getUserInfo());
+                                dispatch(getBoard(""));
+                                dispatch(getBoardList(userId));
+                            } 
+                            else {
+                                dispatch({
+                                    type: Constants.ERROR,
+                                    payload: {
+                                        message:"Something went wrong"
+                                    }
+                                });
+                            }
+                        })
+    }
+}
+
+const editBoard = (id, text, userId)=>{
+
+    return (dispatch, getState) => {
+
+        return  axios
+                    .put('/boards',  {
+                            id,
+                            text
+                    })
+                        .then(response => {
+                            if (response.status === 202) {
+                                dispatch(getBoard(id));
+                                dispatch(getBoardList(userId));
+                            } 
+                            else {
+                                dispatch({
+                                    type: Constants.ERROR,
+                                    payload: {
+                                        message:"Something went wrong"
+                                    }
+                                });
+                            }
+                        })
+    }
+}
+
+const deleteCard = (id, listId, boardId) =>{
+
+    return (dispatch, getState)=>{
+        return  axios
+                    .delete('/cards', {
+                        params: {
+                            id,
+                            listId
+                        }
+                    })
+                        .then((response)=>{
+                            if (response.status === 202) {
+                                dispatch(getBoard(boardId));
+                            } 
+                            else {
+                                dispatch({
+                                    type: Constants.ERROR,
+                                    payload: {
+                                        message:"Something went wrong"
+                                    }
+                                });
+                            }
+                        })
+    }
+}
+
+const editList = (id, text, boardId)=>{
+
+    return (dispatch, getState) => {
+
+        return  axios
+                    .put('/lists',  {
+                            id,
+                            text
+                    })
+                        .then(response => {
+                            if (response.status === 202) {
+                                dispatch(getBoard(boardId));
+                            } 
+                            else {
+                                dispatch({
+                                    type: Constants.ERROR,
+                                    payload: {
+                                        message:"Something went wrong"
+                                    }
+                                });
+                            }
+                        })
+    }
+}
+
+
+const deleteList = (id, boardId) =>{
+
+    return (dispatch, getState)=>{
+        return  axios
+                    .delete('/lists', {
+                        params: {
+                            id,
+                            boardId
+                        }
+                    })
+                        .then((response)=>{
+                            if (response.status === 202) {
+                                dispatch(getBoard(boardId));
+                            } 
+                            else {
+                                dispatch({
+                                    type: Constants.ERROR,
+                                    payload: {
+                                        message:"Something went wrong"
+                                    }
+                                });
+                            }
+                        })
+    }
+}
+
+const syncUp = (id, boardId) =>{
+
+    return (dispatch, getState)=>{
+        dispatch(getBoard(boardId));
+        dispatch(getBoardList(id));
+        dispatch(getCollabs(id));
+    }
+}
+
 export  {
             changeBoard, 
             getBoard, 
@@ -253,5 +392,11 @@ export  {
             addCard, 
             reorderList, 
             reorderCard, 
-            persistUpdate
+            persistUpdate,
+            deleteBoard,
+            editBoard,
+            deleteCard,
+            editList,
+            deleteList,
+            syncUp,
         };

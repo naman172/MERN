@@ -7,6 +7,7 @@ var userSchema = new mongoose.Schema({
     email: String,
     password: String,
     boardOnDisplay: String,
+    collabReq: [{boardId:String, title:String, username:String, email:String}],
     boards: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Board"

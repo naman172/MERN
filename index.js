@@ -18,8 +18,18 @@ const User = require("./models/user");
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost:27017/node-react-starter`,
-                                            {useUnifiedTopology:true, useNewUrlParser:true, useFindAndModify:false});
+mongoose.connect('mongodb+srv://Naman:lightwood@cluster0-fdp0v.mongodb.net/test?retryWrites=true&w=majority',
+                  // process.env.MONGODB_URI || `mongodb://localhost:27017/node-react-starter`,
+                  { useUnifiedTopology:true, 
+                    useNewUrlParser:true, 
+                    useFindAndModify:false
+                  })
+                    .then(()=>{
+                      console.log("Connected to Database");
+                    })
+                      .catch((err)=>{
+                        console.log("Error", err)
+                      });
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());

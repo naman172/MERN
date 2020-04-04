@@ -1,5 +1,6 @@
 export * from "./authActions.js"
 export * from "./boardActions.js"
+export * from "./collabActions.js"
 
 export const Constants = {
     SIGN_UP:"SIGN_UP",
@@ -10,5 +11,7 @@ export const Constants = {
     USER_BOARDS:"USER_BOARDS",
     PERSIST_LIST:"PERSIST_LIST",
     PERSIST_CARD:"PERSIST_CARD",
+    SEND_COLLAB:"SEND_COLLAB",
+    GET_COLLABS:"GET_COLLABS",
     ERROR:"ERROR",
 };

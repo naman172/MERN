@@ -1,7 +1,7 @@
 .body {
     display: flex;
     height: 100%;
-    width: 100%;
+    width: 50%;
 }
 
 .overlayBox {
@@ -22,10 +22,12 @@
     font-size: 2em;
     height:40%;
     width:63%;
+    text-align: center;
+    line-height: 30px;
 }
 
 .subtext{
-    display: inline-flex;
     color: rgba(255,255,255,0.5);
-    font-size: 0.6624em;
+    font-size: 0.58em;
+    margin-top: 16px;
 }

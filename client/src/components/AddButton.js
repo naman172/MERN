@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import Icon from '@material-ui/core/Icon';
 import styles from '../css/addButton.module.css';
 import TextareaAutosize from 'react-textarea-autosize';
 import Card from '@material-ui/core/Card';
 import {connect} from 'react-redux';
-import { addBoard, addList, addCard} from '../actions/index.js';
+import { addBoard, addList, addCard, getBoardList} from '../actions/index.js';
+import {Icon} from 'semantic-ui-react'
  
 
 class AddButton extends Component{
-
+    
     state = {
         form : false,
         text : ""
@@ -22,20 +22,29 @@ class AddButton extends Component{
         })
     }
 
+    handleSync=()=>{
+        this.props.dispatch(getBoardList(this.props.userId));
+    }
+
     renderAddButton(){
         const {list, board} = this.props;
         const addButtonText = list ? "Add another list" : (board?"Add another board":"Add another card");
         const color = (list || board) ? "white" : "inherit";
         const opacity = (list || board) ? 1 : 0.8;
         const backgroundColor = list ? "rgba(256,256,256,0.125)" : "inherit";
-
+        const display = board?"flex":"";
+        const flexDirection=board?"column":"";
         return (
-            <div style = {{color, opacity, backgroundColor}} className={ list ? styles.containerList:null} onClick={this.toggleForm}> 
-                <div className = {!list?(board?styles.containerBoard:styles.containerCard): styles.containerListDisplay}>
-                    <i style={{paddingRight:"6px", paddingLeft:"8px"}} className="fas fa-plus"></i>
-                    <p>{addButtonText}</p>
+            <div style = {{color, opacity, backgroundColor, display, flexDirection}} className={ list ? styles.containerList:null} > 
+                <div className = {!list?(board?styles.containerBoard:styles.containerCard): styles.containerListDisplay} onClick={this.toggleForm}>
+                    <i style={{paddingRight:"6px", paddingLeft:"8px", color}} className="fas fa-plus"></i>
+                    <p style={{marginLeft:"14px"}}>{addButtonText}</p>
                 </div>
-                {board?(<div className={styles.containerBoard}></div>):null}
+                {board?(
+                    <div className={styles.containerBoard} onClick={this.handleSync}>
+                        <Icon style={{paddingRight:"6px", paddingLeft:"8px", color}} name="sync"/>
+                        <p style={{marginLeft:"20px"}}>Sync </p>
+                    </div>):null}
             </div>
         )
     }
@@ -71,13 +80,13 @@ class AddButton extends Component{
     }
 
     handleAddBoard = ()=>{
-        const {dispatch, userId} = this.props;
+        const {dispatch, userId, email, boardOnDisplay} = this.props;
         let title = this.state.text;
         if(title.trim()){
             this.setState({
                 text: ""
             });
-            dispatch(addBoard(userId, title))
+            dispatch(addBoard(userId, title, email, boardOnDisplay))
         }
     }
 
@@ -88,12 +97,13 @@ class AddButton extends Component{
         const placeholderText = list ? 'Enter list title' : (board?"Enter board title":"Enter a title for this card");
         const buttonText = list ? 'Add List' : (board?"Add Board":"Add Card");
 
-        return ( board?(<div>
+        return ( board?(
+            <div>
                 <input type="search" placeholder={placeholderText} className={styles.formSearchBox} autoFocus onBlur={this.toggleForm} onChange={this.handleInput}/>
-                    <div className={styles.formAddContainer}>
-                        <button className={styles.formAddButton} onMouseDown={this.handleAddBoard}> {buttonText} </button>
-                        <i className="fas fa-times" style = {{color:"rgba(0, 0, 0, 0.6)", cursor:"pointer"}} onMouseDown={this.toggleForm}></i>
-                    </div>
+                <div className={styles.formAddContainer}>
+                    <button className={styles.formAddButton} onMouseDown={this.handleAddBoard}> {buttonText} </button>
+                    <i className="fas fa-times" style = {{color:"white", cursor:"pointer"}} onMouseDown={this.toggleForm}></i>
+                </div>
             </div>):(
             <div className= {list ? styles.formBox : null}>
             <Card className ={styles.formCard} style = {list? {border: "2px solid rgba(90,172,68,1)"} : null }>
@@ -120,13 +130,15 @@ const mapStateToProps = (state) => {
     if(state.authDetails.userInfo){
         return {
             userId: state.authDetails.userInfo._id,
-            boardOnDisplay: state.authDetails.userInfo.boardOnDisplay
+            boardOnDisplay: state.authDetails.userInfo.boardOnDisplay,
+            email: state.authDetails.userInfo.email
         }
     }
     else{
         return ({
             userId: "",
-            boardOnDisplay: ""
+            boardOnDisplay: "",
+            email:""
         })
     }    
 }

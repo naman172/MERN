@@ -38,13 +38,13 @@ router.post(`/`, isLoggedIn, async (req, res) => {
 });
 
 router.delete(`/`, isLoggedIn, async (req, res) => {
-    let {id, boardId} = req.body;
+    let {id, boardId} = req.query;
+    let updatedBoard = await Board.findByIdAndUpdate(boardId, {$pull: {lists:id}}, { new: true });
+   
 
-    let deletedList = await List.findByIdAndDelete(id);
-
-    if(deletedList){
-        let updatedBoard = await Board.findByIdAndUpdate(boardId, {$pull: {lists:id}}, { new: true });
-        if(!updatedBoard){
+    if(updatedBoard){
+        let deletedList = await List.findByIdAndDelete(id);
+        if(!deletedList){
             return res.status(404).send({
                 error:true
             });
@@ -91,6 +91,23 @@ router.put('/reorder', isLoggedIn, async (req, res) => {
         error: false
 })    
 });
+
+router.put('/', isLoggedIn, async (req, res)=>{
+    const {id, text} = req.body;
+
+    let list = await List.findByIdAndUpdate(id, {title: text});
+    
+    if(list){
+        return res.status(202).send({
+            error: false
+        })    
+    }
+    else{
+        return res.status(404).send({
+            error:true
+        });
+    }
+})
 
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){

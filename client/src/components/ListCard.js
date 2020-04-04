@@ -1,30 +1,29 @@
 import React from "react";
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import {connect} from "react-redux";
 import styles from '../css/card.module.css'
 import {Draggable} from 'react-beautiful-dnd';
-// import styled from "styled-components";
+import { Icon } from "semantic-ui-react";
+import { deleteCard } from "../actions";
 
-// const StyledCard = styled.div`
-// transform: ${props => props.drag?"rotate(5deg)":null};
-// `
+const ListCard = ({text, cardId, listId, index, dispatch, boardId}) => {
+    
+      const trashCard = ()=>{
+        dispatch(deleteCard(cardId, listId, boardId));
+      }
 
-const ListCard = ({text, cardId, index}) => {
-    return (
+      return (
       <Draggable draggableId={cardId} index={index} >
         {
-          (provided, snapshot) => (
+          (provided) => (
             <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className = {styles.base}>
-              {/* <StyledCard drag={snapshot.isDragging}> */}
-              <Card>
-                <CardContent className={styles.override}>
-                  <Typography>
-                    {text}
-                  </Typography>
-                </CardContent>
-                </Card>
-              {/* </StyledCard> */}
+              <div className={styles.card}>
+                <div className={styles.cardContent}>
+                  {text}
+                </div>
+                <button className={styles.trash}>
+                  <Icon style={{cursor:"pointer"}} onClick={trashCard} name="trash alternate"/>
+                </button>
+              </div>
             </div>
           )
         }
@@ -32,4 +31,17 @@ const ListCard = ({text, cardId, index}) => {
   );
 }
 
-export default ListCard
+const mapStateToProps = (state)=>{
+  if(state.authDetails.userInfo){
+    return {
+      boardId : state.authDetails.userInfo.boardOnDisplay
+    }
+  }
+  else{
+    return {
+      boardId : ""
+    }
+  }
+}
+
+export default connect(mapStateToProps)(ListCard)

@@ -4,11 +4,13 @@ const passport = require('passport');
 const router = express.Router();
 
 const User = require('../models/user');
+const Board = require('../models/board');
 
 router.post('/signUp', (req, res)=> {
     const { username, email, password } = req.body
     let boardOnDisplay = "";
-    let newUser = new User({username, email, boardOnDisplay});
+    let collabReq = [];
+    let newUser = new User({username, email, boardOnDisplay, collabReq});
     User.register(newUser, password, (err, user)=>{
         if(err){
             console.log("err");
@@ -54,13 +56,28 @@ router.post('/signIn', passport.authenticate("local") , (req, res)=>{
     }
 })
 
-router.post('/signOut', (req, res)=>{
+router.post('/signOut', async (req, res)=>{
     if (req.user) {
-        req.logout()
-        res.send({ msg: 'logging out' })
-    } else {
+        
+        if(req.user.boardOnDisplay){
+            let board = await Board.findByIdAndUpdate(req.user.boardOnDisplay, {inUse: false}) 
+        }
+
+        let user = await User.findByIdAndUpdate(req.user._id, {boardOnDisplay : ""})
+    
+        if(user){
+       
+            req.logout()
+            res.send({ msg: 'logging out' })
+        } 
+        else{
+            res.send({msg: "Something went wrong"})
+        } 
+    }
+    else {
         res.send({ msg: 'no user to log out' })
     }
+   
 })
 
 module.exports = router;

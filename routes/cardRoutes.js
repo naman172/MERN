@@ -37,13 +37,11 @@ router.post(`/`, isLoggedIn, async (req, res) => {
 })
 
 router.delete(`/`, isLoggedIn, async (req, res) => {
-    let {id, listId} = req.body;
-
-    let deletedCard = await Card.findByIdAndDelete(id);
-
-    if(deletedCard){
-        let updatedList = await List.findByIdAndUpdate(listId, {$pull: {cards:id}}, { new: true });
-        if(!updatedList){
+    let {id, listId} = req.query;
+    let updatedList = await List.findByIdAndUpdate(listId, {$pull: {cards:id}}, { new: true });
+    if(updatedList){
+        let card = await Card.findByIdAndDelete(id);
+        if(!card){
             return res.status(404).send({
                 error:true
             });

@@ -1,0 +1,30 @@
+.ui.bottom.right.popup {
+    overflow: auto;
+    max-height: 450px;
+}
+
+.ui.card>.content{
+    padding: 0.8em 0.8em;
+}
+
+.ui.yellow.button {
+    width: 100%;
+}    
+
+.ui.bottom.right.popup{
+    min-width:320px;
+    overflow: auto;
+}
+
+.ui.card{
+    margin-top: 0.5em;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+}
+.ui.card:last-child{
+    margin-bottom: 0.5em;
+}
+
+.ui.card:first-child {
+    margin-top: 0.5em;
+}

@@ -5,35 +5,52 @@ const router = express.Router();
 const User = require('../models/user');
 const Board = require('../models/board');
 const List = require('../models/list');
+const Card = require('../models/card');
 
 router.get('/', isLoggedIn, async (req, res) => {
     const id = req.query.id;
-    let boardInfo = await Board.findById(id).populate({ 
-        path: 'lists',
-        populate: {
-          path: 'cards',
-          model: 'Card'
-        } 
-     });
+
+    if(id!==""){
+        let boardInfo = await Board.findById(id).populate({ 
+            path: 'lists',
+            populate: {
+              path: 'cards',
+              model: 'Card'
+            } 
+         });
     
-    if(boardInfo){
-        return res.json({boardInfo});
+        if(boardInfo){
+            return res.json({boardInfo});
+        }
+        else{
+            return res.json({boardInfo: null});
+        }
     }
     else{
         return res.json({boardInfo: null});
     }
     
+    
 });
 
 router.post(`/`, isLoggedIn, async (req, res) => {
-    let {title, id} = req.body;
+    let {title, id, email, boardId} = req.body;
     let newBoard = await Board.create({
-        title
+        title,
+        owner: {id, email},
+        users: [],
+        inUse: true
     });
+
+    if(boardId){
+        let prevBoard = await Board.findByIdAndUpdate(boardId, {inUse: false});
+    }
 
     if(newBoard){
         let user = await User.findById(id) 
         if(user){
+            newBoard.users.push({username: user.username, email: user.email});
+            newBoard.save();
             user.boards.push(newBoard);
             user.save();
             return res.status(201).send({
@@ -50,20 +67,58 @@ router.post(`/`, isLoggedIn, async (req, res) => {
 })
 
 router.delete(`/`, isLoggedIn, async (req, res) => {
-    let {id, userId} = req.body;
+    const {id} = req.query;
 
-    let deletedBoard = await Board.findByIdAndDelete(id);
+    let board = await Board.findById(id).populate("lists");
 
-    if(deletedBoard){
-        let updatedUser = await User.findByIdAndUpdate(userId, {$pull: {boards:id}}, { new: true });
-        if(!updatedUser){
-            return res.status(404).send({
+    if(board){    
+        board.users.forEach(user => {
+            User.findOneAndUpdate({email: user.email}, {$pull: {boards:id}}, { new: true })
+                .catch((err)=>{
+                    return res.status(401).send({
+                        error:true
+                    });
+                })
+        })
+
+        board.lists.forEach(list => {
+            list.cards.forEach(card=>{
+
+                Card.findByIdAndDelete(card)
+                    .catch((err)=>{
+                        return res.status(401).send({
+                            error:true
+                        });
+                    });
+            
+            })
+
+            List.findByIdAndDelete(list._id)
+                .catch((err)=>{
+                    return res.status(401).send({
+                        error:true
+                    });
+                });
+        
+        })
+
+        User.findByIdAndUpdate(board.owner.id, {boardOnDisplay: ""})
+            .catch((err)=>{
+                return res.status(401).send({
+                    error:true
+                });
+            });
+            
+        let deletedBoard = await Board.findByIdAndDelete(id); 
+        
+        if(!deletedBoard){
+            return res.status(402).send({
                 error:true
             });
         }
     }
     else{
-         return res.status(404).send({
+         return res.status(403).send({
             error:true
         });
     }
@@ -80,7 +135,6 @@ router.put('/reorder', isLoggedIn, async (req, res) => {
     if(boardWithDragRemoved){
         let list = await List.findById(draggableId);
         if(list){
-            console.log("here");
             let boardWithDragUpdated = await Board.findByIdAndUpdate(boardId, {$push: {lists: {$each: [list], $position: destinationIndex}}}, { new: true })
             if(!boardWithDragUpdated){
                 return res.status(404).send({
@@ -105,6 +159,22 @@ router.put('/reorder', isLoggedIn, async (req, res) => {
 })    
 });
 
+router.put('/', isLoggedIn, async (req, res)=>{
+    const {id, text} = req.body;
+
+    let board = await Board.findByIdAndUpdate(id, {title: text});
+    
+    if(board){
+        return res.status(202).send({
+            error: false
+        })    
+    }
+    else{
+        return res.status(404).send({
+            error:true
+        });
+    }
+})
 
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){

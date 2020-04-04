@@ -1,0 +1,23 @@
+.ui.action.input>.button{
+    color: white;
+    background-color: rgba(90,172,68,1);
+    margin-right: 6px;
+}
+
+.ui.input>.input{
+    outline: none;
+}
+
+.ui.bottom.center.popup{
+    max-height: 400px ;
+    overflow: auto;
+}
+
+i.icon.trashU {
+    opacity: 0.3;
+}
+
+i.icon.trashU:hover{
+    opacity: 0.7;
+    cursor: pointer;
+}
