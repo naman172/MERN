@@ -53,6 +53,7 @@ const List = ({title, cards, listId, index, boardId, dispatch}) => {
                                         <h4 className={styles.title}>{title}</h4>
                                         <div style={{display: "inline-block"}}>
                                             <Popup
+                                                style={{overflow:"visible"}}
                                                 trigger={
                                                     <button className={styles.icon}><Icon style={{cursor:"pointer"}} name="edit"/></button>
                                                 }

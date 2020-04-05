@@ -5,6 +5,7 @@ const router = express.Router();
 
 const Card = require('../models/card');
 const List = require('../models/list');
+const Board = require('../models/board');
 
 router.post(`/`, isLoggedIn, async (req, res) => {
     let {text, id} = req.body;
@@ -12,8 +13,13 @@ router.post(`/`, isLoggedIn, async (req, res) => {
         text
     });
 
+    
     if(newCard){
         let list = await List.findById(id) 
+        let time = new Date().toDateString();
+        let opLogText = req.user.username + " added the card : " + text.substr(0, 20) + (text.length > 20?"...":"") + " to the list : " + list.title;
+        let board = await Board.findByIdAndUpdate(req.user.boardOnDisplay, {$push: { opLog:{$each: [{action:"add", text:opLogText, timeStamp:time}] } }}, { new: true })
+
         if(list){
             list.cards.push(newCard);
             list.save();
@@ -39,8 +45,14 @@ router.post(`/`, isLoggedIn, async (req, res) => {
 router.delete(`/`, isLoggedIn, async (req, res) => {
     let {id, listId} = req.query;
     let updatedList = await List.findByIdAndUpdate(listId, {$pull: {cards:id}}, { new: true });
+    
     if(updatedList){
         let card = await Card.findByIdAndDelete(id);
+        let time = new Date().toDateString();
+        let opLogText = req.user.username + " deleted the card : " + card.text.substr(0, 20) +  (card.text.length > 20?"...":"") + " from the list "+ updatedList.title;
+    
+        let board = await Board.findByIdAndUpdate(req.user.boardOnDisplay, {$push: { opLog:{$each: [{action:"delete", text:opLogText, timeStamp:time}] } }}, { new: true })
+
         if(!card){
             return res.status(404).send({
                 error:true

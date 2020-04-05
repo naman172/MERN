@@ -4,7 +4,7 @@ import Drawer from '@material-ui/core/Drawer';
 import styles from "../css/sidebar.module.css";
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography} from '@material-ui/core';
-import {Icon} from 'semantic-ui-react';
+import {Icon, Card, Feed} from 'semantic-ui-react';
 
 import AddButton from "./AddButton.js";
 
@@ -28,14 +28,14 @@ var toggleDrawer = (side, open) => {
 var setter;
 
 //Component body
-function SideBar({boards = [], dispatch, id, boardOnDisplay}){
+function SideBar({boards = [], dispatch, id, boardOnDisplay, logs = []}){
 
   const classes = useStyles();
 
   const [state, setState] = useState(
     {
       left: false,
-      right: false,
+      displayLog: false
     }
   )
 
@@ -48,6 +48,11 @@ function SideBar({boards = [], dispatch, id, boardOnDisplay}){
     }
   }
   
+  var handleLog=()=>{
+    setter({...state,
+        displayLog:!state.displayLog
+      })
+  }
 
   var sideList = () => {
 
@@ -72,20 +77,60 @@ function SideBar({boards = [], dispatch, id, boardOnDisplay}){
         </div>)
     })
 
+    let iconVal = (action)=>{
+
+      switch(action){
+        case "add": return "add"
+        case "delete": return "trash alternate"
+        case "collabPlus": return "add user"
+        case "edit": return "edit"
+        case "collabMinus": return "remove user" 
+        case "reorder": return "shuffle"
+        default: return ""
+      }
+    }
+
+    var logList = logs.slice().reverse().map((log)=>
+                  (<Feed.Event>
+                    <Feed.Label ><Icon name={iconVal(log.action)} style={{marginTop:"4px", color:"white", marginLeft:"4px"}}/></Feed.Label>
+                    <Feed.Content style={{padding: "0"}}>
+                      <Feed.Date content={log.timeStamp} style={{color: "rgba(255,255,255,0.4)"}} />
+                      <Feed.Summary style={{color:"rgb(255,255,255)", fontWeight: "400"}}>
+                        {log.text}
+                      </Feed.Summary>
+                    </Feed.Content>
+                  </Feed.Event>)
+                )
+
     return (
     <div style={{width:"100%", height:"100%"}}>
-       <div style={{height:"10%"}}></div>
-       <hr className={styles.hrStyle}/>
-       <div className={styles.boardList}>{boardList}</div>
-       <hr className={styles.hrStyle}/>
-      <AddButton board ="true"/>
+        <div style={{height:"10%", display:"flex"}}>
+          <button disabled={boardOnDisplay===""} className={boardOnDisplay===""?styles.disabled:styles.containerBoard} onClick={handleLog}>
+              <Icon style={{paddingRight:"6px", paddingLeft:"8px", color:"white", opacity:"0.8"}} name="history" size="large"/>
+              <p style={{marginLeft:"20px"}}>Board history</p>
+          </button>
+        </div>
+        <hr className={styles.hrStyle}/>
+        {state.displayLog?
+        (<div style={{height:"88.97%", overflowY:"auto"}}>
+          <Card style={{background:"transparent", width: "220px"}}>
+           <Card.Content>
+             <Feed>{logList}</Feed>
+           </Card.Content> 
+          </Card>
+        </div>):(<div style={{height: "88.97%"}}>
+          <div style={{height:"77%"}} className={styles.boardList}>{boardList}</div><hr className={styles.hrStyle}/><AddButton board ="true"/>
+        </div>)
+        }
     </div>)
 
     };
 
   return (
       <div>
-          <Drawer className={styles.overlay} classes={{paper : classes.paper}} open={state.left} onClose={()=>{toggleDrawer('left', false)}}>
+          <Drawer className={styles.overlay} classes={{paper : classes.paper}} open={state.left} onClose={()=>{
+            toggleDrawer('left', false);
+          }}>
             {sideList()}
           </Drawer> 
       </div>
@@ -93,18 +138,20 @@ function SideBar({boards = [], dispatch, id, boardOnDisplay}){
 }
 
 const mapStateToProps=(state)=>{
-    if(state.boardDetails && state.authDetails.userInfo){
+    if(state.boardDetails.boardInfo && state.authDetails.userInfo && state.boardDetails){
       return {
         id : state.authDetails.userInfo._id,
         boards : state.boardDetails.boardList,
-        boardOnDisplay: state.authDetails.userInfo.boardOnDisplay
+        boardOnDisplay: state.authDetails.userInfo.boardOnDisplay,
+        logs : state.boardDetails.boardInfo.opLog
       }
     }
     else{
       return {
         id : '',
         boards : [],
-        boardOnDisplay:''
+        boardOnDisplay:'',
+        logs:[]
       }
 
     }

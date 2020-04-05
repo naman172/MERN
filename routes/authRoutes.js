@@ -13,8 +13,6 @@ router.post('/signUp', (req, res)=> {
     let newUser = new User({username, email, boardOnDisplay, collabReq});
     User.register(newUser, password, (err, user)=>{
         if(err){
-            console.log("err");
-            console.log(err);
             return res.send({msg:"its not working"})
         }
         passport.authenticate("local")(req, res, ()=>{
@@ -47,8 +45,7 @@ router.post('/signIn', passport.authenticate("local") , (req, res)=>{
     or not by the method as presented in the internet 
     post that you are following for simple MERN auth */ 
     router.get('/user', (req, res, next) => {
-    console.log('===== user!!======')
-    console.log(req.user)
+    
     if (req.user) {
         res.json({ user: req.user })
     } else {

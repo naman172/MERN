@@ -13,9 +13,13 @@ router.post(`/`, isLoggedIn, async (req, res) => {
     });
     
     if(newList){
+        
         let board = await Board.findById(id) 
         if(board){
+            let time = new Date().toDateString();
+            let opLogText = req.user.username + " added the list : " + title;
             board.lists.push(newList);
+            board.opLog.push({action:"add", text:opLogText, timeStamp:time});
             board.save();
         }
         else{
@@ -39,8 +43,15 @@ router.post(`/`, isLoggedIn, async (req, res) => {
 
 router.delete(`/`, isLoggedIn, async (req, res) => {
     let {id, boardId} = req.query;
+    
+    let list = await List.findById(id);
+    
+    let time = new Date().toDateString();
+    let opLogText = req.user.username + " deleted the list : " + list.title;
+    
     let updatedBoard = await Board.findByIdAndUpdate(boardId, {$pull: {lists:id}}, { new: true });
-   
+    updatedBoard.opLog.push({action:"delete", text:opLogText, timeStamp:time})
+    updatedBoard.save()
 
     if(updatedBoard){
         let deletedList = await List.findByIdAndDelete(id);
@@ -69,6 +80,21 @@ router.put('/reorder', isLoggedIn, async (req, res) => {
     if(listWithDragRemoved){
         if(card){
             let listWithDragUpdated = await List.findByIdAndUpdate(destinationId, {$push: {cards: {$each: [card], $position: destinationIndex}}}, { new: true })
+            
+            let time = new Date().toDateString();
+            
+            let opLogText;
+            if(sourceId === destinationId){
+                opLogText = req.user.username + " rearranged the card : " + card.text.substr(0, 20) + (card.text.length>20?"...":"");
+
+            }
+            else{
+                opLogText = req.user.username + " moved the card : " + card.text.substr(0, 20) + (card.text.length>20?"...":"") + " from " + listWithDragRemoved.title + " to " + listWithDragUpdated.title;
+
+            }            
+
+            let board = await Board.findByIdAndUpdate(req.user.boardOnDisplay, {$push: { opLog:{$each: [{action:"reorder", text:opLogText, timeStamp:time}] } }}, { new: true })
+
             if(!listWithDragUpdated){
                 return res.status(404).send({
                     error:true
@@ -97,6 +123,11 @@ router.put('/', isLoggedIn, async (req, res)=>{
 
     let list = await List.findByIdAndUpdate(id, {title: text});
     
+    let time = new Date().toDateString();
+    let opLogText = req.user.username + " renamed the list : " + list.title + " to " + text;
+
+    let board = await Board.findByIdAndUpdate(req.user.boardOnDisplay, {$push: { opLog:{$each: [{action:"edit", text:opLogText, timeStamp:time}] } }}, { new: true })
+
     if(list){
         return res.status(202).send({
             error: false

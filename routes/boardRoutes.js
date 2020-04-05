@@ -39,7 +39,8 @@ router.post(`/`, isLoggedIn, async (req, res) => {
         title,
         owner: {id, email},
         users: [],
-        inUse: true
+        inUse: true,
+        opLog: []
     });
 
     if(boardId){
@@ -49,7 +50,11 @@ router.post(`/`, isLoggedIn, async (req, res) => {
     if(newBoard){
         let user = await User.findById(id) 
         if(user){
+
+            let opLogText = user.username + " created the board : " + title;
+            let time = new Date().toDateString();
             newBoard.users.push({username: user.username, email: user.email});
+            newBoard.opLog.push({action: "add", text: opLogText, timeStamp:time})
             newBoard.save();
             user.boards.push(newBoard);
             user.save();
@@ -135,7 +140,9 @@ router.put('/reorder', isLoggedIn, async (req, res) => {
     if(boardWithDragRemoved){
         let list = await List.findById(draggableId);
         if(list){
-            let boardWithDragUpdated = await Board.findByIdAndUpdate(boardId, {$push: {lists: {$each: [list], $position: destinationIndex}}}, { new: true })
+            let time = new Date().toDateString();
+            let opLogText = req.user.username + " rearranged the lists";
+            let boardWithDragUpdated = await Board.findByIdAndUpdate(boardId, {$push: { lists: {$each: [list], $position: destinationIndex}, opLog:{$each: [{action:"reorder", text:opLogText, timeStamp:time}] } }}, { new: true })
             if(!boardWithDragUpdated){
                 return res.status(404).send({
                     error:true
@@ -161,9 +168,13 @@ router.put('/reorder', isLoggedIn, async (req, res) => {
 
 router.put('/', isLoggedIn, async (req, res)=>{
     const {id, text} = req.body;
-
-    let board = await Board.findByIdAndUpdate(id, {title: text});
     
+    let time = new Date().toDateString();
+    let opLogText = req.user.username + " renamed the board to " + text;
+    let board = await Board.findByIdAndUpdate(id, {title: text}, {new: true});
+    board.opLog.push({action:"edit", text:opLogText, timeStamp:time});
+    board.save();
+
     if(board){
         return res.status(202).send({
             error: false

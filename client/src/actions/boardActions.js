@@ -189,6 +189,9 @@ const reorderList = (destinationIndex, draggableId, boardId)=>{
                                     }
                                 });
                             }
+                            else{
+                                dispatch(getBoard(boardId))
+                            }
                         })
     }
 }
@@ -212,6 +215,9 @@ const reorderCard = (sourceId, destinationId, destinationIndex, draggableId, boa
                                         message:"Something went wrong"
                                     }
                                 });
+                            }
+                            else{
+                                dispatch(getBoard(boardId))
                             }
                         })
     }

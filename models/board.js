@@ -8,7 +8,8 @@ var boardSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "List"
     }],
-    inUse: Boolean
+    inUse: Boolean,
+    opLog: [{action:String, text:String, timeStamp:String}]
 });
 
 var Board = mongoose.model("Board", boardSchema);

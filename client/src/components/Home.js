@@ -34,7 +34,7 @@ class Home extends Component{
                     
                     {this.props.boardOnDisplay ?
                         (
-                            <div>
+                            <div style={{height:"100%"}}>
                                 <BoardBar/>
                                 <div className={styles.boardbody}>
                                     <Board id="boardContainer"/>

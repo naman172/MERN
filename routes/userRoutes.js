@@ -77,7 +77,10 @@ router.put('/collabAccept', isLoggedIn, async (req, res) => {
     let user = await User.findByIdAndUpdate(id, {$pull: {collabReq: {boardId}}}, {new: true});
     let board = await Board.findById(boardId);
     if(user && board){
+        let time = new Date().toDateString();
+        let opLogText = user.username + " was added as a collaborator to this board";
         board.users.push({username: user.username, email: user.email});
+        board.opLog.push({action:"collabPlus", text:opLogText, timeStamp:time});
         board.save();
         user.boards.push(board);
         user.save();
@@ -125,7 +128,11 @@ router.get('/collab', isLoggedIn, async (req, res) => {
 router.delete('/collab', isLoggedIn, async (req, res) => {
     const {email, boardId} = req.query;
     let user = await User.findOneAndUpdate({email}, {$pull: {boards: boardId}}, {new: true});
+    let time = new Date().toDateString();
+    let opLogText = user.username + "'s access as a collaborator to this board was terminated";
     let board = await Board.findByIdAndUpdate(boardId, {$pull: {users: {email: user.email}}}, {new:true});
+    board.opLog.push({action: "collabMinus", text: opLogText, timeStamp:time})
+    board.save();
 
     if(user && board){
         return res.status(202).send({
