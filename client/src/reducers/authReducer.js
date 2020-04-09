@@ -3,6 +3,7 @@ import {Constants} from "../actions/index.js";
 const initState = {
     loggedIn: false,
     userInfo: null,
+    message:{show:false, msg:{}}
 };
 
 const authReducer = (state = initState, action) => {
@@ -10,17 +11,17 @@ const authReducer = (state = initState, action) => {
     switch(action.type){
 
         case Constants.SIGN_UP:{
-            //Creat a push notification with the message from payload
-            return state;
+            let newState = {...state, message:{show:true, msg:action.payload}};
+            return newState;
         }
         
         case Constants.SIGN_IN:{
-            let newState = {...state, loggedIn: action.payload.loggedIn};
+            let newState = {...state, loggedIn: action.payload.loggedIn, message:{show:true, msg: {error:action.payload.error, message:action.payload.message}}};
             return newState;
         }
         
         case Constants.SIGN_OUT:{
-            let newState = {...state, loggedIn: action.payload.loggedIn};
+            let newState = {...state, loggedIn: action.payload.loggedIn, message:{show:false, msg:{} }};
             return newState;
         }
         
@@ -29,9 +30,14 @@ const authReducer = (state = initState, action) => {
             return newState;
         }
         
+        case Constants.TOGGLE_SHOW:{
+            let newState = {...state, message:action.payload }
+            return newState
+        }
+
         case Constants.ERROR:{
-            //create an alert with the message from action.payload
-            return state;
+            let newState = {...state, message:{show:true, msg:action.payload}};
+            return newState;
         }
 
         default: return state;

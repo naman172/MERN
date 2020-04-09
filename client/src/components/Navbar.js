@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import {connect} from 'react-redux'
-import {Popup, Icon, Card, Button} from 'semantic-ui-react';
+import {Popup, Icon, Card, Button, Label} from 'semantic-ui-react';
+import FlashMessage from 'react-flash-message' 
 
 import '../css/navbar.css'
 import styles from "../css/navbar.module.css";
@@ -13,8 +14,17 @@ import {signOutReq, collabAccept, collabReject, getCollabs, syncUp, changeBoard}
 
 const Navbar = ({title, buttons, dispatch, history, collabs, userId, boardOnDisplay}) => {
     
+    const [state, setState] = useState(
+        {
+          accept: false
+        }
+      )
+
     const accept=(id,boardId)=>{
         dispatch(collabAccept(id, boardId))
+        setState({
+            accept:true
+        });
     }
     const reject=(id,boardId)=>{
         dispatch(collabReject(id, boardId))
@@ -62,6 +72,7 @@ const Navbar = ({title, buttons, dispatch, history, collabs, userId, boardOnDisp
                             trigger={
                                 <button className={styles.bell}>
                                     <Icon name="bell outline" size="large"></Icon>
+                                    {collabs.length?<Label color='red' style={{    position: "absolute", top: "8px", right: "118px", fontSize:"xx-small"}}>{collabs.length}</Label>:""}
                                 </button>
                             }
                             content={
@@ -94,15 +105,24 @@ const Navbar = ({title, buttons, dispatch, history, collabs, userId, boardOnDisp
                                 </div>
                                 }
                             on='click'
-                            position='bottom right'
+                            position="bottom right"
+                            className={styles.pop}
                         />
                         <button className={styles.logout} onClick={()=>{dispatch(signOutReq(history))}}>
-                            <div style={{alignSelf: "center"}}>Logout</div>
+                            <div style={{alignSelf: "center"}}><Icon name="sign-out alternate" size="large"/>Logout</div>
                         </button>
                     </div>
                     ):""
             }
             </div>
+            {state.accept?( 
+                <FlashMessage duration={3000} onShow={()=>{setState({accept:!state.accept})}} style={{position:"absolute", zIndex:"100"}} >
+                    <div className={styles.flashContainer}>
+                        <div className={styles.flash}>    
+                            Collaboration request accepted. This board has been added to your list. 
+                        </div>
+                    </div>
+                </FlashMessage>):""}
         </div>
     </div>
     );
@@ -111,7 +131,7 @@ const Navbar = ({title, buttons, dispatch, history, collabs, userId, boardOnDisp
 const mapStateToProps =(state)=>{
     if(state.collabs && state.authDetails.userInfo && state.boardDetails.boardInfo){
         return{
-            collabs: state.collabs,
+            collabs: state.collabs.users,
             userId: state.authDetails.userInfo._id,
             boardOnDisplay: state.boardDetails.boardInfo._id
         }

@@ -1,6 +1,7 @@
 .ui.bottom.right.popup {
     overflow: auto;
     max-height: 450px;
+    min-width:334px;
 }
 
 .ui.card>.content{
@@ -10,11 +11,6 @@
 .ui.yellow.button {
     width: 100%;
 }    
-
-.ui.bottom.right.popup{
-    min-width:320px;
-    overflow: auto;
-}
 
 .ui.card{
     margin-top: 0.5em;

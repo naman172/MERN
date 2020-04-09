@@ -20,7 +20,8 @@ const sendCollabRequest=(boardId, title, username, email, recipient)=>{
                                 dispatch({
                                     type: Constants.SEND_COLLAB,
                                     payload:{
-                                        message: "Collaboration request was successfully sent"
+                                        error: false,
+                                        message: "Collaboration request has been sent successfully"
                                     }
                                 })
                             }
@@ -28,7 +29,8 @@ const sendCollabRequest=(boardId, title, username, email, recipient)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message: response.msg
+                                        error: true,
+                                        message: "Couldn't send a collaboration request, please check the email id"
                                     }
                                 });
                             }})
@@ -53,6 +55,7 @@ const collabAccept=(id, boardId)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
+                                        error: true,
                                         message:"Something went wrong"
                                     }
                                 });
@@ -77,6 +80,7 @@ const collabReject=(id, boardId)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
+                                        error: true,
                                         message:"Something went wrong"
                                     }
                                 });
@@ -107,6 +111,7 @@ const getCollabs=(id)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
+                                        error: true,
                                         message:"Something went wrong"
                                     }
                                 });
@@ -132,6 +137,7 @@ const deleteCollab = (email, boardId, id) =>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
+                                        error: true,
                                         message:"Something went wrong"
                                     }
                                 });
@@ -140,10 +146,21 @@ const deleteCollab = (email, boardId, id) =>{
     }
 }
 
+const toggleSend=()=>{
+
+    return (dispatch, getState) =>{
+        dispatch({
+            type: Constants.TOGGLE_SHOW,
+            payload: {show:false, msg:{}}
+        })
+    }
+}
+
 export {
     sendCollabRequest,
     collabAccept,
     collabReject,
     getCollabs,
-    deleteCollab
+    deleteCollab,
+    toggleSend
 }

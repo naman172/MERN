@@ -6,8 +6,8 @@ import {withRouter} from 'react-router'
 import Navbar from './Navbar.js';
 import Board from './Board.js';
 import SideBar from './Sidebar.js'
-import NoBoardsToDisplay from './NoBoardsToDisplay.js'
 import BoardBar from './BoardBar.js'
+import {BoardInfo, NavInfo, BoardMenuInfo} from './Homepage.js'
 
 import styles from "../css/home.module.css"
 import '../css/homeIndex.css'
@@ -30,7 +30,7 @@ class Home extends Component{
         return (
             <div className="home">
                 <div className={styles.body}>
-                    <Navbar className={styles.nav} title={'trello'} history={this.props.history} buttons/>
+                    <Navbar className={styles.nav} title={'Scenario'} history={this.props.history} buttons/>
                     
                     {this.props.boardOnDisplay ?
                         (
@@ -42,9 +42,19 @@ class Home extends Component{
                             </div>
                         ):
                         (
-                            <div style={{display:"flex", height:"100%"}}>
-                                <div style={{width:"50%"}}></div>
-                                <NoBoardsToDisplay />
+                            <div style={{display:"flex", height:"100%", overflow:"auto"}}>
+                               <div className={styles.homepageLR}>
+                                   <BoardMenuInfo />
+                               </div>
+                                <div className={styles.homepageCenter}>
+                                    <div className={styles.homeCenterText}>
+                                        Hi {this.props.username}, <br/> Ready to get some work done ?
+                                    </div>
+                                    <BoardInfo className={styles.homeCenter}/>
+                                </div>
+                                <div className={styles.homepageLR}>
+                                    <NavInfo/>
+                                </div>
                             </div>
                         )
                     } 
@@ -56,16 +66,22 @@ class Home extends Component{
 }
 
 const mapStateToProps = (state) => {
-    if(state.authDetails.userInfo){
+    if(state.authDetails.userInfo && state.boardDetails){
         return {
+            username:state.authDetails.userInfo.username,
+            email:state.authDetails.userInfo.email,
             id : state.authDetails.userInfo._id,
-            boardOnDisplay: state.authDetails.userInfo.boardOnDisplay
+            boardOnDisplay: state.authDetails.userInfo.boardOnDisplay,
+            boardList:state.boardDetails.boardList
         }
     }
     else{
         return ({
+            username:"",
+            email:"",
             id: "",
-            boardOnDisplay: null
+            boardOnDisplay: null,
+            boardList:[]
         })
     }    
 }

@@ -1,24 +1,32 @@
 import {Constants} from "../actions/index.js";
 
-const initState = [];
+const initState = {
+    users: [],
+    send: {}
+};
 
 const collabReducer = (state = initState, action) => {
 
     switch(action.type){
 
         case Constants.SEND_COLLAB:{
-            //Creat a push notification with the message from payload
-            return state;
-        }
-        
-        case Constants.GET_COLLABS:{
-            let newState = action.payload.collabs;
+            let newState = {...state, send:{show:true,msg:action.payload}}
             return newState;
         }
         
+        case Constants.GET_COLLABS:{
+            let newState = {...state, users:action.payload.collabs, send:{show:false, msg:{}} };
+            return newState;
+        }
+        
+        case Constants.TOGGLE_SHOW :{
+            let newState = {...state, send:action.payload}
+            return newState;
+        } 
+
         case Constants.ERROR:{
-            //create an alert with the message from action.payload
-            return state;
+            let newState = {...state, send:{show:true,msg:action.payload}}
+            return newState;
         }
 
         default: return state;

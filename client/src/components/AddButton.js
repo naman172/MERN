@@ -28,7 +28,7 @@ class AddButton extends Component{
 
     renderAddButton(){
         const {list, board} = this.props;
-        const addButtonText = list ? "Add another list" : (board?"Add another board":"Add another card");
+        const addButtonText = list ? "Add another list" : (board?"Add new board":"Add another card");
         const color = (list || board) ? "white" : "inherit";
         const opacity = (list || board) ? 1 : 0.8;
         const backgroundColor = list ? "rgba(256,256,256,0.125)" : "inherit";

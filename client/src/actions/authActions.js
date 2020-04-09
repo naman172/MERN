@@ -15,19 +15,21 @@ const signUpReq=(username, email, password)=>{
                         password
                     })
                         .then(response => {
-                            if (!response.data.errmsg) {
+                            if (!response.data.msg) {
                                 dispatch({
                                     type: Constants.SIGN_UP,
                                     payload: {
-                                        message:"Successful Sign-up, Please login to continue"
+                                        error:false,
+                                        message:"Successful Sign-up, Please Sign-in to continue."
                                     }
                                 })
-                            } 
+                            }
                             else {
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"This Email is already registered"
+                                        error:true,
+                                        message:"This Email is already registered."
                                     }
                                 })
                             }
@@ -36,7 +38,8 @@ const signUpReq=(username, email, password)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Sign-up Error"
+                                        error:true,
+                                        message:"Something went wrong"
                                     }
                                 })
                             })
@@ -78,6 +81,7 @@ const signInReq= (email, password)=>{
                                                             dispatch({
                                                                 type: Constants.ERROR,
                                                                 payload: {
+                                                                    error: true,
                                                                     message:"Something went wrong"
                                                                 }
                                                             });
@@ -94,6 +98,7 @@ const signInReq= (email, password)=>{
                                                             dispatch({
                                                                 type: Constants.ERROR,
                                                                 payload: {
+                                                                    error: true,
                                                                     message:"Something went wrong"
                                                                 }
                                                             });
@@ -109,7 +114,8 @@ const signInReq= (email, password)=>{
                                                         dispatch({
                                                             type: Constants.SIGN_IN,
                                                             payload: {
-                                                                message:"Successful Sign-in",
+                                                                error:true,
+                                                                message: "Successful Sign-in",
                                                                 loggedIn: true,
                                                             }
                                                         })
@@ -119,6 +125,7 @@ const signInReq= (email, password)=>{
                                                             dispatch({
                                                                 type: Constants.ERROR,
                                                                 payload: {
+                                                                    error: true,
                                                                     message:"Something went wrong"
                                                                 }
                                                             });
@@ -149,6 +156,7 @@ const signInReq= (email, password)=>{
                                                                 dispatch({
                                                                     type: Constants.SIGN_IN,
                                                                     payload: {
+                                                                        error: false,
                                                                         message:"Successful Sign-in",
                                                                         loggedIn: true,
                                                                     }
@@ -158,6 +166,7 @@ const signInReq= (email, password)=>{
                                                                 dispatch({
                                                                     type: Constants.ERROR,
                                                                     payload: {
+                                                                        error: true,
                                                                         message:"Something went wrong"
                                                                     }
                                                                 });
@@ -166,7 +175,6 @@ const signInReq= (email, password)=>{
                                                 }
                                             } 
                                             else {
-                                                    console.log("err")
                                                     dispatch({
                                                         type: Constants.USER_INFO,
                                                         payload: {
@@ -179,6 +187,7 @@ const signInReq= (email, password)=>{
                                                 dispatch({
                                                     type: Constants.ERROR,
                                                     payload: {
+                                                                error: true,
                                                                 message:"Something went Wrong"
                                                             }
                                                 })
@@ -189,8 +198,9 @@ const signInReq= (email, password)=>{
                                 dispatch({
                                             type: Constants.ERROR,
                                             payload: {
-                                                        message:"Sign-in Error"
-                                                    }
+                                                error: true,
+                                                message:"Something went wrong"
+                                            }
                                 })
                             }
                         })
@@ -198,8 +208,9 @@ const signInReq= (email, password)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                                message:"Sign-in Error"
-                                            }
+                                        error: true,
+                                        message:"Email-id or Password is wrong"
+                                    }
                                 })
                             })
     }
@@ -254,7 +265,8 @@ const getUserInfo=(toggle = false)=>{
                                 type: Constants.USER_INFO,
                                 payload: {
                                     loggedIn: true,
-                                    userInfo: response.data.user
+                                    userInfo: response.data.user,
+                                    message: {show:false, msg:{}}
                                 }
                             })
                             if(toggle){
@@ -274,4 +286,14 @@ const getUserInfo=(toggle = false)=>{
     }
 }
 
-export {signUpReq, signInReq, signOutReq, getUserInfo};
+const toggleShow=()=>{
+
+    return (dispatch, getState) =>{
+        dispatch({
+            type: Constants.TOGGLE_SHOW,
+            payload: {show:false, msg:{}}
+        })
+    }
+}
+
+export {signUpReq, signInReq, signOutReq, getUserInfo, toggleShow};

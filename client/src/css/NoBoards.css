@@ -1,13 +1,11 @@
 .body {
     display: flex;
     height: 100%;
-    width: 50%;
 }
 
 .overlayBox {
-    height: 87%;
     width: 100%;
-    margin: 12px;
+    margin: 6px;
     display: flex;
     border-radius: 3px;
     align-items: center;
@@ -19,15 +17,15 @@
 
 .text{
     text-align:center;
-    font-size: 2em;
-    height:40%;
-    width:63%;
+    font-size: 1.6em;
     text-align: center;
     line-height: 30px;
+    margin: 0 20px;
 }
 
 .subtext{
     color: rgba(255,255,255,0.5);
     font-size: 0.58em;
     margin-top: 16px;
+    line-height:20px;
 }

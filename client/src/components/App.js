@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {BrowserRouter, Route, Redirect} from 'react-router-dom';
+import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {getUserInfo} from "../actions/index";
 
@@ -19,20 +19,22 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="container">
-          <Route exact path="/">
-            <div>Landing Page</div>
-          </Route>
-          <Route exact path="/auth">
-            <Login />
-          </Route>
-          <Route exact path="/home">
-            {
-              this.props.loggedIn?(<Home/>):(<Redirect to= "/auth" />)
-            }
-          </Route>
-          <Route exact path="/logout">
-            <div>Logged out</div>
-          </Route>
+            <Switch>
+              <Route exact path="/auth">
+                <Login />
+              </Route>
+              <Route exact path="/home">
+                {
+                  this.props.loggedIn?(<Home/>):(<Redirect to= "/auth" />)
+                }
+              </Route>
+              <Route exact path="/logout">
+                <div>Logged out</div>
+              </Route>
+              <Route path="/">
+                <div>Landing Page</div>
+              </Route>
+            </Switch>
         </div>
       </BrowserRouter>
     );

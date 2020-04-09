@@ -35,7 +35,7 @@ router.put(`/board`, isLoggedIn, async (req, res) => {
             })    
     }
     else{
-        return res.status(404).send({
+        return res.send({
             error:true
         });
     }
@@ -57,7 +57,7 @@ router.post('/collab', isLoggedIn, async (req, res) => {
             })
         }
         else{
-            return res.status(404).send({
+            return res.send({
                 error: true,
                 msg:"user not found"
             })
@@ -90,7 +90,7 @@ router.put('/collabAccept', isLoggedIn, async (req, res) => {
         })
     }
     else{
-        return res.status(404).send({
+        return res.send({
             error: true,
             msg:"Something went wrong"
         })
@@ -107,7 +107,7 @@ router.put('/collabDeny', isLoggedIn, async (req, res) => {
         })
     }
     else{
-        return res.status(404).send({
+        return res.send({
             error: true,
             msg:"Something went wrong"
         })
@@ -141,7 +141,7 @@ router.delete('/collab', isLoggedIn, async (req, res) => {
         })
     }
     else{
-        return res.status(404).send({
+        return res.send({
             error: true,
             msg:"user not found"
         })

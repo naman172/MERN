@@ -9,6 +9,7 @@ import {Icon, Card, Feed} from 'semantic-ui-react';
 import AddButton from "./AddButton.js";
 
 import {changeBoard} from '../actions/index'
+import NoBoardsToDisplay from './NoBoardsToDisplay';
 
 const useStyles = makeStyles({
   paper: {
@@ -116,10 +117,14 @@ function SideBar({boards = [], dispatch, id, boardOnDisplay, logs = []}){
           <Card style={{background:"transparent", width: "220px"}}>
            <Card.Content>
              <Feed>{logList}</Feed>
-           </Card.Content> 
+           </Card.Content>
           </Card>
         </div>):(<div style={{height: "88.97%"}}>
-          <div style={{height:"77%"}} className={styles.boardList}>{boardList}</div><hr className={styles.hrStyle}/><AddButton board ="true"/>
+          <div style={{height:"77%"}} className={styles.boardList}>
+            {boardList.length?boardList:<NoBoardsToDisplay/>}
+          </div>
+          <hr className={styles.hrStyle}/>
+          <AddButton board ="true"/>
         </div>)
         }
     </div>)

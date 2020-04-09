@@ -13,16 +13,18 @@ router.post('/signUp', (req, res)=> {
     let newUser = new User({username, email, boardOnDisplay, collabReq});
     User.register(newUser, password, (err, user)=>{
         if(err){
-            return res.send({msg:"its not working"})
+            return res.send({msg:1})
         }
-        passport.authenticate("local")(req, res, ()=>{
-            console.log("signed up");
+        else{
+            passport.authenticate("local")(req, res, ()=>{
             /*  the user has signed up and will have to login 
                 to access our app at this point we don't need 
                 to return or res.send anything, the display of
                 successful signup message has to be taken care 
-                of in the frontend */ 
-        });
+                of in the frontend */     
+            });
+            return res.send({msg:0})
+        }
     });
 });
 
@@ -47,9 +49,9 @@ router.post('/signIn', passport.authenticate("local") , (req, res)=>{
     router.get('/user', (req, res, next) => {
     
     if (req.user) {
-        res.json({ user: req.user })
+        res.json({ user: req.user, msg:0})
     } else {
-        res.json({ user: null })
+        res.json({ user: null, msg:1 })
     }
 })
 

@@ -89,7 +89,7 @@ router.put('/reorder', isLoggedIn, async (req, res) => {
 
             }
             else{
-                opLogText = req.user.username + " moved the card : " + card.text.substr(0, 20) + (card.text.length>20?"...":"") + " from " + listWithDragRemoved.title + " to " + listWithDragUpdated.title;
+                opLogText = req.user.username + " moved the card : " + card.text.substr(0, 20) + (card.text.length>20?"...":"") + " from list : " + listWithDragRemoved.title + " to list : " + listWithDragUpdated.title;
 
             }            
 

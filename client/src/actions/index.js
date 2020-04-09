@@ -13,5 +13,6 @@ export const Constants = {
     PERSIST_CARD:"PERSIST_CARD",
     SEND_COLLAB:"SEND_COLLAB",
     GET_COLLABS:"GET_COLLABS",
+    TOGGLE_SHOW:"TOOGLE_SHOW",
     ERROR:"ERROR",
 };
