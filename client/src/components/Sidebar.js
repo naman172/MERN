@@ -91,8 +91,8 @@ function SideBar({boards = [], dispatch, id, boardOnDisplay, logs = []}){
       }
     }
 
-    var logList = logs.slice().reverse().map((log)=>
-                  (<Feed.Event>
+    var logList = logs.slice().reverse().map((log, index)=>
+                  (<Feed.Event key={index}>
                     <Feed.Label ><Icon name={iconVal(log.action)} style={{marginTop:"4px", color:"white", marginLeft:"4px"}}/></Feed.Label>
                     <Feed.Content style={{padding: "0"}}>
                       <Feed.Date content={log.timeStamp} style={{color: "rgba(255,255,255,0.4)"}} />

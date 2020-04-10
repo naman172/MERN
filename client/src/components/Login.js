@@ -92,14 +92,14 @@ class Login extends Component {
                       <div id="signUp">
                         <div className="content">
                           <h1>Welcome Back!</h1>
-                          <p>Continue on with your work by loggin in with your email id.</p>
+                          <p class="subTextOverlay">Continue on with your work by loggin in with your email id.</p>
                           <button onClick={this.handleClick}>Sign In</button>
                         </div>
                       </div>
                       <div id="signIn">
                         <div className="content">
                           <h1>Hey!</h1>
-                          <p>Enter your personal details and start your journey with us today.</p>
+                          <p class="subTextOverlay">Enter your personal details and start your journey with us today.</p>
                           <button onClick={this.handleClick}>Sign Up</button>
                         </div>
                       </div>
@@ -113,9 +113,9 @@ class Login extends Component {
                           <input type="email" required placeholder="Email" value={this.state.email} onChange={this.handleInput}/><br/>
                           <input type="password" required placeholder='Password' value={this.state.password} onChange={this.handleInput}/>
                           <p/>
-                          <button>Sign In</button>
+                          <button style={{marginBottom:"50px"}}>Sign In</button>
                         </form>
-                        <div className="divider">
+                        {/* <div className="divider">
                           <div className="divider1"></div>
                           <div className="divider2">
                             or
@@ -125,7 +125,7 @@ class Login extends Component {
                         <button className="social">
                           <i className="fab fa-facebook-f facebook"></i>
                           <span>Continue with Facebook</span>
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                     <div id="signUpForm" className={this.state.overlayPositionLeft?"":"shiftLeft"}>
@@ -135,9 +135,9 @@ class Login extends Component {
                           <input type="text" required placeholder="Username" value={this.state.username} onChange={this.handleInput}/><br/>
                           <input type="email" required placeholder="Email" value={this.state.email} onChange={this.handleInput}/><br/>
                           <input type="password" required placeholder='Password' value={this.state.password} onChange={this.handleInput}/>
-                          <button>Sign Up</button>
+                          <button style={{marginBottom:"50px"}}>Sign Up</button>
                         </form>
-                        <div className="divider">
+                        {/* <div className="divider">
                           <div className="divider1"></div>
                           <div className="divider2">
                             or
@@ -147,7 +147,7 @@ class Login extends Component {
                         <button className="social">
                           <i className="fab fa-facebook-f facebook"></i>
                           <span>Continue with Facebook</span>
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>
@@ -159,7 +159,7 @@ class Login extends Component {
             {(this.props.message.show?( 
                 <FlashMessage duration={3000} style={{position:"absolute", zIndex:"100"}} >
                     <div className="flashContainer">
-                        <div className="flash" style={this.props.message.msg.error?{background: "linear-gradient(45deg, crimson 30%, white 130%)"}:{background: "linear-gradient(45deg, rgba(90,172,68,1) 75%, white 110%)"}}>    
+                        <div className="flash" style={this.props.message.msg.error?{backgroundImage: "linear-gradient(45deg , #ff0844 0%, #ffb199 100%)"}:{backgroundImage: "linear-gradient(45deg, #9be15d 0%, #00e3ae 100%)"}}>    
                             {this.props.message.msg.message}
                         </div>
                     </div>

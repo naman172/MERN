@@ -14,5 +14,6 @@ export const Constants = {
     SEND_COLLAB:"SEND_COLLAB",
     GET_COLLABS:"GET_COLLABS",
     TOGGLE_SHOW:"TOOGLE_SHOW",
+    ERROR_COLLAB:"ERROR_COLLAB",
     ERROR:"ERROR",
 };

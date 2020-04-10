@@ -165,7 +165,7 @@ class BoardBar extends Component{
                 {(this.props.send.show?( 
                 <FlashMessage duration={3000} style={{position:"absolute", zIndex:"100"}} >
                     <div className="flashContainer">
-                        <div className="flash" style={this.props.send.msg.error?{background: "linear-gradient(45deg, crimson 30%, white 130%)"}:{background: "linear-gradient(45deg, rgba(90,172,68,1) 75%, white 110%)"}}>    
+                        <div className="flash" style={this.props.send.msg.error?{backgroundImage: "linear-gradient(45deg , #ff0844 0%, #ffb199 100%)"}:{backgroundImage: "linear-gradient(45deg, #9be15d 0%, #00e3ae 100%)"}}>    
                             {this.props.send.msg.message}
                         </div>
                     </div>

@@ -4,7 +4,9 @@ import {connect} from 'react-redux';
 import {getUserInfo} from "../actions/index";
 
 import Login from './Login';
-import Home from './Home'
+import Home from './Home';
+import Logout from "./Logout";
+import Landing from './Landing';
 
 import '../css/App.css';
 
@@ -29,10 +31,10 @@ class App extends Component {
                 }
               </Route>
               <Route exact path="/logout">
-                <div>Logged out</div>
+                <Logout/>
               </Route>
               <Route path="/">
-                <div>Landing Page</div>
+                <Landing/>
               </Route>
             </Switch>
         </div>

@@ -19,7 +19,9 @@ div::-webkit-scrollbar-thumb:hover {
   }
 
 ::-webkit-scrollbar-corner{
-    background-color: rgb(210,144,52);
+    /* background-color: rgb(210,144,52); */
+    background-image:linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+
 }
 
 ::-webkit-scrollbar-track {

@@ -89,6 +89,12 @@ router.put('/collabAccept', isLoggedIn, async (req, res) => {
             msg:"Collaboration request accepted"
         })
     }
+    else if(user){
+        return res.status(203).send({
+            error: false,
+            msg:"Collaboration request was expired"
+        })
+    }
     else{
         return res.send({
             error: true,

@@ -1,0 +1,103 @@
+.body{
+    height:257%;    
+    overflow: visible;
+    background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+}
+
+.textOne{
+    margin:30px;
+    display: flex;
+    justify-self: center;
+}
+
+.sticky{
+    position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.scenario{
+    font-family: 'Caveat', cursive;
+    font-size: 1.7em;
+    margin-right: 6px;
+}
+
+.frameOne{
+    height:88vh;
+    display: flex;
+    justify-content: center;
+}
+
+.textOne{
+    height:55%;
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.textHead{
+    font-family: "roboto";
+    font-weight: 500;
+    font-size: 2.9em;
+    margin-top: 32px;
+    color: white;
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+.textSub{
+    font-family: "roboto";
+    font-weight: 400;
+    font-size: 1.9em;
+    color: white;
+    text-align: center;
+}
+
+.frameTwo{
+    background-color: whitesmoke;
+    height:67vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-evenly;
+}
+
+.cardHolder{
+    height:85%;
+}
+
+#card1,#card2,#card3,#card4{
+    transform: scale(1.1)
+}
+
+.frameThree{
+    background-color: rgba(246, 211, 101, 0.4) ;
+    height:109vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.textThree{
+    margin-top: 165px;
+    width:60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.curve{
+    position: absolute;
+    top:55%;
+}
+
+.frameFour{
+    position: relative;
+    bottom: -30.94%;
+    height: 25%;
+    width:100%;
+    background-color: rgba(246, 211, 101, 0.7);
+}

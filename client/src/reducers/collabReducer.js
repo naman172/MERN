@@ -8,7 +8,6 @@ const initState = {
 const collabReducer = (state = initState, action) => {
 
     switch(action.type){
-
         case Constants.SEND_COLLAB:{
             let newState = {...state, send:{show:true,msg:action.payload}}
             return newState;
@@ -24,7 +23,7 @@ const collabReducer = (state = initState, action) => {
             return newState;
         } 
 
-        case Constants.ERROR:{
+        case Constants.ERROR_COLLAB:{
             let newState = {...state, send:{show:true,msg:action.payload}}
             return newState;
         }

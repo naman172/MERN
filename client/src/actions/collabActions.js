@@ -27,7 +27,7 @@ const sendCollabRequest=(boardId, title, username, email, recipient)=>{
                             }
                             else{
                                 dispatch({
-                                    type: Constants.ERROR,
+                                    type: Constants.ERROR_COLLAB,
                                     payload: {
                                         error: true,
                                         message: "Couldn't send a collaboration request, please check the email id"
@@ -51,9 +51,19 @@ const collabAccept=(id, boardId)=>{
                                 dispatch(getCollabs(id));
                                 dispatch(getBoardList(id));
                             }
+                            else if(response.status === 203){
+                                dispatch(getCollabs(id));
+                                dispatch({
+                                    type: Constants.ERROR_COLLAB,
+                                    payload: {
+                                        error: true,
+                                        message:"Collaboration request was expired"
+                                    }
+                                });
+                            }
                             else{
                                 dispatch({
-                                    type: Constants.ERROR,
+                                    type: Constants.ERROR_COLLAB,
                                     payload: {
                                         error: true,
                                         message:"Something went wrong"
@@ -78,7 +88,7 @@ const collabReject=(id, boardId)=>{
                             }
                             else{
                                 dispatch({
-                                    type: Constants.ERROR,
+                                    type: Constants.ERROR_COLLAB,
                                     payload: {
                                         error: true,
                                         message:"Something went wrong"
@@ -109,7 +119,7 @@ const getCollabs=(id)=>{
                             } 
                             else{
                                 dispatch({
-                                    type: Constants.ERROR,
+                                    type: Constants.ERROR_COLLAB,
                                     payload: {
                                         error: true,
                                         message:"Something went wrong"
@@ -135,7 +145,7 @@ const deleteCollab = (email, boardId, id) =>{
                             }
                             else{
                                 dispatch({
-                                    type: Constants.ERROR,
+                                    type: Constants.ERROR_COLLAB,
                                     payload: {
                                         error: true,
                                         message:"Something went wrong"
