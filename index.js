@@ -18,8 +18,9 @@ const User = require("./models/user");
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb+srv://Naman:lightwood@cluster0-fdp0v.mongodb.net/test?retryWrites=true&w=majority',
-                  // process.env.MONGODB_URI || `mongodb://localhost:27017/node-react-starter`,
+mongoose.connect(process.env.MONGODB_URI,
+                  // 'mongodb+srv://Naman:lightwood@cluster0-fdp0v.mongodb.net/test?retryWrites=true&w=majority' 
+                  // `mongodb://localhost:27017/node-react-starter`,
                   { useUnifiedTopology:true, 
                     useNewUrlParser:true, 
                     useFindAndModify:false
