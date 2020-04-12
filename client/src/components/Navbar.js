@@ -10,7 +10,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import {toggleDrawer} from "./Sidebar.js"
 
 
-import {signOutReq, collabAccept, collabReject, getCollabs, syncUp, changeBoard, toggleSend, toggleShow, getBoard} from "../actions/index";
+import {signOutReq, collabAccept, collabReject, getCollabs, syncUp, changeBoard, toggleSend, toggleShow, getBoard, getBoardList, toggleMessage} from "../actions/index";
 
 const Navbar = ({title, buttons, dispatch, history, collabs, userId, boardOnDisplay}) => {
     
@@ -43,6 +43,8 @@ const Navbar = ({title, buttons, dispatch, history, collabs, userId, boardOnDisp
     }
 
     const handleBoards = ()=>{
+        dispatch(getBoardList(userId))
+        dispatch(toggleMessage())
         dispatch(getBoard(boardOnDisplay))
         toggleDrawer("left", true)
         toggleSend()

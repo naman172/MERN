@@ -155,7 +155,6 @@ class Login extends Component {
               </div>
             </section>
           </div>
-            {console.log(this.props.message.show)}
             {(this.props.message.show?( 
                 <FlashMessage duration={3000} style={{position:"absolute", zIndex:"100"}} >
                     <div className="flashContainer">

@@ -23,7 +23,8 @@ const changeBoard=(id, boardId, prevBoardId)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -54,7 +55,8 @@ const getBoard=(id)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -62,7 +64,7 @@ const getBoard=(id)=>{
     }
 }
 
-const getBoardList=(id)=>{
+const getBoardList=(id, change)=>{
     return (dispatch, getState) => {
 
         return  axios
@@ -79,12 +81,40 @@ const getBoardList=(id)=>{
                                         boardList: response.data.boardList
                                     }
                                 })
+                                
+                                if(change){
+                                    let selectedBoard = response.data.boardList.find((board)=>(board._id===change.boardId));
+                                    if(selectedBoard){
+                                        if(!selectedBoard.inUse){
+                                        dispatch(changeBoard(change.id, change.boardId, change.prevBoardId));;
+                                        }
+                                        else{
+                                            dispatch({
+                                                type: Constants.ERROR,
+                                                payload: {
+                                                    show:true,
+                                                    msg:"It seems like someone is already working on this board."
+                                                }
+                                            });
+                                        }
+                                    }
+                                    else{
+                                        dispatch({
+                                            type: Constants.ERROR,
+                                            payload: {
+                                                show:true,
+                                                msg:"This board was deleted by the owner."
+                                            }
+                                        });
+                                    }
+                                }
                             } 
                             else {
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -112,7 +142,8 @@ const addBoard = (id, title, email, boardId)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -137,7 +168,8 @@ const addList = (id, title)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -162,7 +194,8 @@ const addCard = (boardId, id, text)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -185,7 +218,8 @@ const reorderList = (destinationIndex, draggableId, boardId)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -209,7 +243,8 @@ const reorderCard = (sourceId, destinationId, destinationIndex, draggableId, boa
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -262,7 +297,8 @@ const deleteBoard = (id, userId)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -288,7 +324,8 @@ const editBoard = (id, text, userId)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -314,7 +351,8 @@ const deleteCard = (id, listId, boardId) =>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -339,7 +377,8 @@ const editList = (id, text, boardId)=>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -366,7 +405,8 @@ const deleteList = (id, boardId) =>{
                                 dispatch({
                                     type: Constants.ERROR,
                                     payload: {
-                                        message:"Something went wrong"
+                                        show:false,
+                                        msg:"Something went wrong"
                                     }
                                 });
                             }
@@ -382,6 +422,17 @@ const syncUp = (id, boardId) =>{
         dispatch(getCollabs(id));
     }
 }
+
+const toggleMessage=()=>{
+
+    return (dispatch, getState) =>{
+        dispatch({
+            type: Constants.TOGGLE_MESSAGE,
+            payload: {show:false, msg:{}}
+        })
+    }
+}
+
 
 export  {
             changeBoard, 
@@ -399,4 +450,5 @@ export  {
             editList,
             deleteList,
             syncUp,
+            toggleMessage
         };

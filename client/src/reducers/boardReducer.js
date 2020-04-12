@@ -2,7 +2,8 @@ import {Constants} from "../actions/index.js";
 
 const initState = {
     boardInfo: {},
-    boardList: []
+    boardList: [],
+    message:{show:false, msg:""}
 };
 
 const boardReducer = (state = initState, action) => {
@@ -10,12 +11,12 @@ const boardReducer = (state = initState, action) => {
     switch(action.type){
 
         case Constants.BOARD_INFO:{
-            let newState = {...state, boardInfo: action.payload.boardInfo};
+            let newState = {...state, boardInfo: action.payload.boardInfo, message:{show:false, msg:""}};
             return newState;
         }
 
         case Constants.USER_BOARDS:{
-            let newState = {...state, boardList: action.payload.boardList};
+            let newState = {...state, boardList: action.payload.boardList, message:{show:false, msg:""}};
             return newState;
         }
 
@@ -62,9 +63,14 @@ const boardReducer = (state = initState, action) => {
             return newState;
         }
 
+        case Constants.TOGGLE_MESSAGE:{
+            let newState = {...state, message:action.payload };
+            return newState
+        }
+
         case Constants.ERROR:{
-            //create an alert with the message from action.payload
-            return state;
+            let newState = {...state, message:action.payload};
+            return newState;
         }
 
         default: return state;

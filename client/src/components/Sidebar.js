@@ -5,10 +5,11 @@ import styles from "../css/sidebar.module.css";
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography} from '@material-ui/core';
 import {Icon, Card, Feed} from 'semantic-ui-react';
+import FlashMessage from "react-flash-message";
 
 import AddButton from "./AddButton.js";
 
-import {changeBoard} from '../actions/index'
+import {getBoardList, toggleMessage} from '../actions/index'
 import NoBoardsToDisplay from './NoBoardsToDisplay';
 
 const useStyles = makeStyles({
@@ -29,7 +30,7 @@ var toggleDrawer = (side, open) => {
 var setter;
 
 //Component body
-function SideBar({boards = [], dispatch, id, boardOnDisplay, logs = []}){
+function SideBar({boards = [], dispatch, id, boardOnDisplay, logs = [], message = {}}){
 
   const classes = useStyles();
 
@@ -45,7 +46,8 @@ function SideBar({boards = [], dispatch, id, boardOnDisplay, logs = []}){
   function handleClick(e){
     let inUse = e.currentTarget.getAttribute("data-condition")
     if(inUse === 'false'){
-      dispatch(changeBoard(id,e.currentTarget.getAttribute("data-id"), boardOnDisplay));
+      dispatch(toggleMessage());
+      dispatch(getBoardList(id, {id, boardId : e.currentTarget.getAttribute("data-id"), prevBoardId: boardOnDisplay}));
     }
   }
   
@@ -137,7 +139,16 @@ function SideBar({boards = [], dispatch, id, boardOnDisplay, logs = []}){
             toggleDrawer('left', false);
           }}>
             {sideList()}
-          </Drawer> 
+          </Drawer>
+          {console.log(message.show)}
+          {(message.show?( 
+                <FlashMessage duration={3000} style={{position:"absolute", zIndex:"1000"}} >
+                    <div className="flashContainer">
+                        <div className={styles.flash} style={{backgroundImage: "linear-gradient(45deg , #ff0844 0%, #ffb199 100%)"}}>    
+                            {message.msg}
+                        </div>
+                    </div>
+                </FlashMessage>):"")}
       </div>
     );
 }
@@ -148,7 +159,8 @@ const mapStateToProps=(state)=>{
         id : state.authDetails.userInfo._id,
         boards : state.boardDetails.boardList,
         boardOnDisplay: state.authDetails.userInfo.boardOnDisplay,
-        logs : state.boardDetails.boardInfo.opLog
+        logs : state.boardDetails.boardInfo.opLog,
+        message: state.boardDetails.message
       }
     }
     else{
@@ -156,7 +168,8 @@ const mapStateToProps=(state)=>{
         id : '',
         boards : [],
         boardOnDisplay:'',
-        logs:[]
+        logs:[],
+        message: {}
       }
 
     }
