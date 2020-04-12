@@ -177,7 +177,7 @@ const BoardInfo = () => (
             <Feed.Summary>
               Allows you to send a collaboration request
             </Feed.Summary>
-            <Feed.Meta>Anyone who becomes a collaborator to a board, can further send collaboration requests for the said board to other users</Feed.Meta>
+            <Feed.Meta>Anyone who becomes a collaborator to a board can further send collaboration requests for the said board to other users</Feed.Meta>
           </Feed.Content>
         </Feed.Event>
       </Feed>

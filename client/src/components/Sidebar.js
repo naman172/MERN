@@ -140,7 +140,6 @@ function SideBar({boards = [], dispatch, id, boardOnDisplay, logs = [], message 
           }}>
             {sideList()}
           </Drawer>
-          {console.log(message.show)}
           {(message.show?( 
                 <FlashMessage duration={3000} style={{position:"absolute", zIndex:"1000"}} >
                     <div className="flashContainer">

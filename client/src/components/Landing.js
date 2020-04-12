@@ -17,7 +17,7 @@ class Landing extends Component {
                     </svg>
                     <div className={styles.frameOne}>
                     <div className={styles.textOne}>
-                        <p className={styles.textHead}>What's the scene ?</p>
+                        <p className={styles.textHead}>What's the scene?</p>
                         <p className={styles.textSub}>With <span className={styles.scenario}>Scenario's</span> fast, easy & efficient project management features keep your scene, well as they say... sorted.</p>                    
                         <Button style={{backgroundColor:"white", fontSize: "1.5em", zIndex:"1"}} onClick={()=>{this.props.history.push('/auth')}}>
                             Let's get started
@@ -48,12 +48,12 @@ class Landing extends Component {
                                     <Card.Content>
                                     <Card.Header>Add lists to your board</Card.Header>
                                     <Card.Description>
-                                        To Do? Doing? Done? 
+                                        To-Do? Doing? Done? 
                                         <br/> 
                                         Add lists to your board to represent the different states that a task could be in.
                                     </Card.Description>
                                     <br/>
-                                    <Card.Meta>I have a list called "Procastinating about for a long time" on my board</Card.Meta>
+                                    <Card.Meta>I have a list called "Procrastinating about for a long time" on my board</Card.Meta>
                                     </Card.Content>
                                 </Card>
                             </div>
@@ -82,11 +82,11 @@ class Landing extends Component {
                                     <Card.Description>
                                         Made some progress with your project? 
                                         <br/> 
-                                        Switch up the position of the cards OR even lists just by draging them around your board.
+                                        Switch up the position of the cards OR even lists just by dragging them around your board.
                                     </Card.Description>
                                     <br/>
                                     <Card.Meta>
-                                    Sometimes when I'm not making any progess, I like to play around with the cards just for fun. 
+                                    Sometimes when I'm not making any progress, I like to play around with the cards just for fun. 
                                     </Card.Meta>
                                     </Card.Content>
                                 </Card>

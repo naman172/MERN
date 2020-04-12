@@ -29,7 +29,7 @@ class Home extends Component{
     render(){
         return (
             <div className="home">
-                <div className={styles.body}>
+                <div className={styles.body} style={this.props.boardOnDisplay?{}:{overflow:"auto"}}>
                     <Navbar className={styles.nav} title={'Scenario'} history={this.props.history} buttons/>
                     
                     {this.props.boardOnDisplay ?
@@ -42,7 +42,7 @@ class Home extends Component{
                             </div>
                         ):
                         (
-                            <div style={{display:"flex", height:"100%", overflow:"auto"}}>
+                            <div style={{display:"flex", height:"fit-content", overflow:"visible"}}>
                                <div className={styles.homepageLR}>
                                    <BoardMenuInfo />
                                </div>
