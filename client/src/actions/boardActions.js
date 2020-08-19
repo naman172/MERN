@@ -92,7 +92,7 @@ const getBoardList=(id, change)=>{
                                             dispatch({
                                                 type: Constants.ERROR,
                                                 payload: {
-                                                    show:true,
+                                                    show:false, // causes error if true 
                                                     msg:"It seems like someone is already working on this board."
                                                 }
                                             });
