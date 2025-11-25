@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api.js";
 
 import {Constants, getBoardList} from './index.js'
 import { getBoard } from "./boardActions.js";
@@ -7,7 +7,7 @@ const sendCollabRequest=(boardId, title, username, email, recipient)=>{
     
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .post('./user/collab', {
                         boardId,
                         title, 
@@ -41,7 +41,7 @@ const collabAccept=(id, boardId)=>{
     
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .put('./user/collabAccept', {
                         boardId,
                         id
@@ -77,7 +77,7 @@ const collabReject=(id, boardId)=>{
     
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .put('./user/collabDeny', {
                         boardId,
                         id
@@ -102,7 +102,7 @@ const getCollabs=(id)=>{
     
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .get('./user/collab', {
                         params:{
                             id
@@ -131,7 +131,7 @@ const getCollabs=(id)=>{
 
 const deleteCollab = (email, boardId, id) =>{
     return (dispatch, getState) =>{
-        return  axios
+        return  api
                     .delete('/user/collab',{
                         params:{
                             email,

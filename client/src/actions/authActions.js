@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api.js";
 
 import {Constants} from "./index.js";
 
@@ -8,7 +8,7 @@ const signUpReq=(username, email, password)=>{
     
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .post('/auth/signUp', {
                         username,
                         email,
@@ -50,24 +50,24 @@ const signInReq= (email, password)=>{
 
     return (dispatch, getState) => {
         
-        return  axios
+        return  api
                     .post('/auth/signIn', {
                         email,
                         password
                     })
                         .then(response => {
                             if (response.status === 200) {
-                                axios
+                                api
                                     .get('/auth/user')
                                         .then(userResponse => {
                                             if (userResponse.data.user) {
                                                 let id = userResponse.data.user._id;
                                                 let boardOnDisplay = userResponse.data.user.boardOnDisplay;
                                                 if(boardOnDisplay){
-                                                    axios.all([
-                                                        axios.get('/user', {params:{id}}),
-                                                        axios.get('/boards', {params:{id: boardOnDisplay}})
-                                                    ]).then(axios.spread((...responses) => {
+                                                    api.all([
+                                                        api.get('/user', {params:{id}}),
+                                                        api.get('/boards', {params:{id: boardOnDisplay}})
+                                                    ]).then(api.spread((...responses) => {
                                                         const responseOne = responses[0]
                                                         const responseTwo = responses[1]
                                                         if(responseOne.data.boardList){
@@ -132,7 +132,7 @@ const signInReq= (email, password)=>{
                                                         })
                                                 }
                                                 else{
-                                                    axios
+                                                    api
                                                     .get('/user', {
                                                         params:{
                                                             id
@@ -216,49 +216,50 @@ const signInReq= (email, password)=>{
     }
 }
 
-const signOutReq=(history)=>{
-    
+const signOutReq = (history) => {
     return (dispatch, getState) => {
-
-        return  axios
-                    .post("/auth/signOut")
-                        .then((response)=>{
-                            if (response.status === 200) {
-                                dispatch({
-                                    type: Constants.SIGN_OUT,
-                                    payload: {
-                                        message:"Successful Sign-out",
-                                        loggedIn: false,
-                                        // set up component did mount in the logout component with a getUserInfo dispatch
-                                    }
-                                })
-                                history.push("/logout");
-                            }
-                            else{
-                                dispatch({
-                                    type: Constants.ERROR,
-                                    payload: {
-                                        message:"Sign-out Error"
-                                    }
-                                })
-                            }
-                        })
-                            .catch(error => {
-                                dispatch({
-                                    type: Constants.ERROR,
-                                    payload: {
-                                        message:"Sign-out Error"
-                                    }
-                                })
-                            })
+        console.log("Sign out request starting..."); // Add this
+        
+        return api
+            .post("/auth/signOut")
+            .then((response) => {
+                console.log("Sign out response:", response); // Add this
+                
+                if (response.status === 200) {
+                    dispatch({
+                        type: Constants.SIGN_OUT,
+                        payload: {
+                            message: "Successful Sign-out",
+                            loggedIn: false,
+                        }
+                    })
+                    history.push("/logout");
+                }
+                else {
+                    dispatch({
+                        type: Constants.ERROR,
+                        payload: {
+                            message: "Sign-out Error"
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                console.log("Sign out error:", error); // Add this
+                dispatch({
+                    type: Constants.ERROR,
+                    payload: {
+                        message: "Sign-out Error"
+                    }
+                })
+            })
     }
 }
-
 const getUserInfo=(toggle = false)=>{
     
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .get('/auth/user').then(response => {
                         if (response.data.user) {
                             dispatch({

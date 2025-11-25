@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api.js";
 
 import {Constants} from './index.js'
 import {getUserInfo} from './index.js'
@@ -7,7 +7,7 @@ import { getCollabs } from "./collabActions.js";
 const changeBoard=(id, boardId, prevBoardId)=>{
 
     return (dispatch, getState) => {
-        return  axios
+        return  api
                     .put('/user/board', {
                         id,
                         boardId,
@@ -36,7 +36,7 @@ const getBoard=(id)=>{
     
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .get('/boards', {
                         params:{
                             id
@@ -67,7 +67,7 @@ const getBoard=(id)=>{
 const getBoardList=(id, change)=>{
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .get('/user', {
                         params:{
                             id
@@ -126,7 +126,7 @@ const addBoard = (id, title, email, boardId)=>{
 
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .post('/boards', {
                         title,
                         id,
@@ -155,7 +155,7 @@ const addList = (id, title)=>{
 
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .post('/lists', {
                         title,
                         id
@@ -181,7 +181,7 @@ const addCard = (boardId, id, text)=>{
 
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .post('/cards', {
                         text,
                         id
@@ -207,7 +207,7 @@ const reorderList = (destinationIndex, draggableId, boardId)=>{
 
     return (dispatch, getState) => {
     
-        return  axios
+        return  api
                     .put('/boards/reorder', {
                         destinationIndex, 
                         draggableId, 
@@ -231,7 +231,7 @@ const reorderCard = (sourceId, destinationId, destinationIndex, draggableId, boa
 
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .put('/lists/reorder', {
                         sourceId, 
                         destinationId, 
@@ -281,7 +281,7 @@ const deleteBoard = (id, userId)=>{
 
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .delete('/boards',  {
                         params:{
                             id
@@ -310,7 +310,7 @@ const editBoard = (id, text, userId)=>{
 
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .put('/boards',  {
                             id,
                             text
@@ -336,7 +336,7 @@ const editBoard = (id, text, userId)=>{
 const deleteCard = (id, listId, boardId) =>{
 
     return (dispatch, getState)=>{
-        return  axios
+        return  api
                     .delete('/cards', {
                         params: {
                             id,
@@ -364,7 +364,7 @@ const editList = (id, text, boardId)=>{
 
     return (dispatch, getState) => {
 
-        return  axios
+        return  api
                     .put('/lists',  {
                             id,
                             text
@@ -390,7 +390,7 @@ const editList = (id, text, boardId)=>{
 const deleteList = (id, boardId) =>{
 
     return (dispatch, getState)=>{
-        return  axios
+        return  api
                     .delete('/lists', {
                         params: {
                             id,

@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require("cors");
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
@@ -6,55 +7,55 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const MongoStore = require('connect-mongo')(session);
-
 const authRouter = require('./routes/authRoutes');
 const cardRouter = require('./routes/cardRoutes');
 const listRouter = require('./routes/listRoutes');
 const boardRouter = require('./routes/boardRoutes');
 const userRouter = require('./routes/userRoutes');
-
 const User = require("./models/user");
-
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(
-                  // process.env.MONGODB_URI,
-                  'mongodb+srv://Naman:lightwood@cluster0-fdp0v.mongodb.net/test?retryWrites=true&w=majority', 
-                  // `mongodb://localhost:27017/node-react-starter`,
-                  { useUnifiedTopology:true, 
-                    useNewUrlParser:true, 
-                    useFindAndModify:false
-                  })
-                    .then(()=>{
-                      console.log("Connected to Database");
-                    })
-                      .catch((err)=>{
-                        console.log("Error", err)
-                      });
+mongoose.connect('mongodb+srv://MERN:E3tRMPTsm8RtI4aq@cluster0.xf0pzj9.mongodb.net/mernDB?retryWrites=true&w=majority')
+    .then(() => {
+        console.log("Connected to Database");
+    })
+    .catch((err) => {
+        console.log("Error", err)
+    });
+
+app.use(cors({
+    origin: 'http://localhost:3000', 
+    credentials: true
+}));
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-//Sessions
+// Sessions
 app.use(
-  session({
-  secret: 'cheesecake', //Random string to make the hash
-  store: new MongoStore({ mongooseConnection: mongoose.connection}),
-  resave: false,
-  saveUninitialized:false
-  })
-)
+    session({
+        secret: 'cheesecake',
+        store: new MongoStore({ mongooseConnection: mongoose.connection}),
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24, 
+            httpOnly: true,
+            sameSite: 'lax'
+        }
+    })
+);
 
-//Passport
+// Passport
 app.use(passport.initialize());
-app.use(passport.session()); // calls serializeUser and deserializeUser
+app.use(passport.session());
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-//Backend Routes
+// Backend Routes
 app.use("/auth", authRouter);
 app.use("/cards", cardRouter);
 app.use("/lists", listRouter);
@@ -63,14 +64,13 @@ app.use("/user", userRouter);
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
-  
     const path = require('path');
-    app.get('*', (req,res) => {
+    app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-    })
+    });
 }
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`app running on port ${PORT}`)
+    console.log(`app running on port ${PORT}`); 
 });

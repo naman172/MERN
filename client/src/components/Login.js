@@ -92,14 +92,14 @@ class Login extends Component {
                       <div id="signUp">
                         <div className="content">
                           <h1>Welcome Back!</h1>
-                          <p class="subTextOverlay">Continue on with your work by loggin in with your email id.</p>
+                          <p className="subTextOverlay">Continue on with your work by loggin in with your email id.</p>
                           <button onClick={this.handleClick}>Sign In</button>
                         </div>
                       </div>
                       <div id="signIn">
                         <div className="content">
                           <h1>Hey!</h1>
-                          <p class="subTextOverlay">Enter your personal details and start your journey with us today.</p>
+                          <p className="subTextOverlay">Enter your personal details and start your journey with us today.</p>
                           <button onClick={this.handleClick}>Sign Up</button>
                         </div>
                       </div>

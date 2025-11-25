@@ -8,13 +8,13 @@ class Logout extends Component{
             <div className={styles.body}>
                 <div className={styles.container}>
                     <NavFloat/>
-                    <section class={styles.display}>
-                        <div class={styles.base}>
-                            <div class={styles.card}>
-                                <p class={styles.textHead}>
-                                    Thanks for using <span class={styles.scenario}>Scenario</span>
+                    <section className={styles.display}>
+                        <div className={styles.base}>
+                            <div className={styles.card}>
+                                <p className={styles.textHead}>
+                                    Thanks for using <span className={styles.scenario}>Scenario</span>
                                 </p>
-                                <p class={styles.textSub}>
+                                <p className={styles.textSub}>
                                     You're all logged out
                                 </p>
                             </div>

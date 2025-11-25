@@ -10,21 +10,20 @@ router.post('/signUp', (req, res)=> {
     const { username, email, password } = req.body
     let boardOnDisplay = "";
     let collabReq = [];
-    let newUser = new User({username, email, boardOnDisplay, collabReq});
+    let newUser = new User({ email, username, boardOnDisplay, collabReq});
     User.register(newUser, password, (err, user)=>{
         if(err){
+            console.error("Signup Error:", err);
             return res.send({msg:1})
         }
-        else{
-            passport.authenticate("local")(req, res, ()=>{
-            /*  the user has signed up and will have to login 
-                to access our app at this point we don't need 
-                to return or res.send anything, the display of
-                successful signup message has to be taken care 
-                of in the frontend */     
-            });
-            return res.send({msg:0})
-        }
+        
+        passport.authenticate("local")(req, res, () => {
+            if (err) {
+                console.error("Authentication Error:", err);
+                return res.send({ msg: 1 });
+            }
+            return res.send({ msg: 0 });   
+        });        
     });
 });
 
@@ -36,17 +35,20 @@ router.post('/signIn', passport.authenticate("local") , (req, res)=>{
         can tailor the app content according to the user and
         all further requests can be authenticated */
     let userInfo = {
-            username: req.body.username,
-            email: req.body.email
+            username: req.user.username,
+            email: req.user.email
         }
     res.send(userInfo);
-    
-    });
+});
 
 /*  use this route to check wether a user is logged-in 
     or not by the method as presented in the internet 
     post that you are following for simple MERN auth */ 
-    router.get('/user', (req, res, next) => {
+router.get('/user', (req, res, next) => {
+    
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
     
     if (req.user) {
         res.json({ user: req.user, msg:0})
@@ -55,28 +57,45 @@ router.post('/signIn', passport.authenticate("local") , (req, res)=>{
     }
 })
 
-router.post('/signOut', async (req, res)=>{
-    if (req.user) {
-        
-        if(req.user.boardOnDisplay){
-            let board = await Board.findByIdAndUpdate(req.user.boardOnDisplay, {inUse: false}) 
+router.post('/signOut', async (req, res) => {
+    console.log("=== SIGNOUT ROUTE HIT ===");
+    console.log("User exists:", !!req.user);
+    
+    if (!req.user) {
+        console.log("No user in session");
+        return res.status(401).json({msg: 'no user to log out'});
+    }
+
+    try {
+        // Clean up board if needed
+        if (req.user.boardOnDisplay) {
+            console.log("Clearing board...");
+            await Board.findByIdAndUpdate(req.user.boardOnDisplay, {inUse: false});
         }
 
-        let user = await User.findByIdAndUpdate(req.user._id, {boardOnDisplay : ""})
+        // Clear user's boardOnDisplay
+        console.log("Updating user...");
+        await User.findByIdAndUpdate(req.user._id, {boardOnDisplay: ""});
     
-        if(user){
-       
-            req.logout()
-            res.send({ msg: 'logging out' })
-        } 
-        else{
-            res.send({msg: "Something went wrong"})
-        } 
+        console.log("Logging out...");
+        // Passport 0.4.1 - NO callback needed
+        req.logout();
+        
+        console.log("Destroying session...");
+        req.session.destroy((err) => {
+            if (err) {
+                console.log("Session destroy error:", err);
+                return res.status(500).json({msg: "Logout failed"});
+            }
+            console.log("Sending response...");
+            res.clearCookie('connect.sid');
+            res.status(200).json({msg: 'logging out'});
+        });
+        
+    } catch (error) {
+        console.log("SignOut error:", error);
+        res.status(500).json({msg: "Something went wrong"});
     }
-    else {
-        res.send({ msg: 'no user to log out' })
-    }
-   
-})
+});
 
 module.exports = router;

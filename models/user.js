@@ -3,9 +3,8 @@ const passportLocalMongoose = require('passport-local-mongoose');
 
 
 var userSchema = new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String,
+    email: { type: String, unique: true, required: true },
+    username: { type: String, required: true },
     boardOnDisplay: String,
     collabReq: [{boardId:String, title:String, username:String, email:String}],
     boards: [{

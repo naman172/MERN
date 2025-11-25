@@ -161,7 +161,6 @@ class BoardBar extends Component{
                        
                     </div>):""}
                 </div>
-                {console.log(this.props.send.show)}
                 {(this.props.send.show?( 
                 <FlashMessage duration={3000} style={{position:"absolute", zIndex:"100"}} >
                     <div className="flashContainer">
