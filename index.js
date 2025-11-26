@@ -7,7 +7,7 @@ const morgan = require('morgan');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require("connect-mongo");
 const authRouter = require('./routes/authRoutes');
 const cardRouter = require('./routes/cardRoutes');
 const listRouter = require('./routes/listRoutes');
@@ -43,7 +43,7 @@ app.use(
         secret: 'cheesecake',
         store: MongoStore.create({
             mongoUrl: process.env.MONGO_URL,
-            collectionName: "sessions"
+            collectionName: "sessions",
         }),
         resave: false,
         saveUninitialized: false,
