@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require("cors");
 const mongoose = require('mongoose');
@@ -16,7 +18,7 @@ const User = require("./models/user");
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb+srv://MERN:E3tRMPTsm8RtI4aq@cluster0.xf0pzj9.mongodb.net/mernDB?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGO_URL)
     .then(() => {
         console.log("Connected to Database");
     })
@@ -25,7 +27,7 @@ mongoose.connect('mongodb+srv://MERN:E3tRMPTsm8RtI4aq@cluster0.xf0pzj9.mongodb.n
     });
 
 app.use(cors({
-    origin: 'http://localhost:3000', 
+    origin: process.env.UI_PORT, 
     credentials: true
 }));
 
@@ -43,7 +45,8 @@ app.use(
         cookie: {
             maxAge: 1000 * 60 * 60 * 24, 
             httpOnly: true,
-            sameSite: 'lax'
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
         }
     })
 );
@@ -61,14 +64,6 @@ app.use("/cards", cardRouter);
 app.use("/lists", listRouter);
 app.use("/boards", boardRouter);
 app.use("/user", userRouter);
-
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('client/build'));
-    const path = require('path');
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-    });
-}
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
