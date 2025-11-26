@@ -1,5 +1,5 @@
 # MERN
-http://scenario-mern.herokuapp.com/
+https://scenario-me.netlify.app/
 
 MERN (MongoDB, ExpressJs, ReactJs, and NodeJs) stack-based productivity-oriented web app inspired by Trello.
 
