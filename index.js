@@ -25,6 +25,7 @@ mongoose.connect(process.env.MONGO_URL)
         console.log("Error", err)
     });
 
+app.set('trust proxy', 1);
 app.use(cors({
     origin: process.env.UI_PORT, 
     credentials: true
@@ -40,7 +41,10 @@ app.use(cookieParser());
 app.use(
     session({
         secret: 'cheesecake',
-        store: new MongoStore({ mongooseConnection: mongoose.connection}),
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGO_URL,
+            collectionName: "sessions"
+        }),
         resave: false,
         saveUninitialized: false,
         cookie: {
