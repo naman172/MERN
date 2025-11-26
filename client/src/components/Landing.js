@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button} from 'semantic-ui-react'
-import {withRouter} from 'react-router'
+import {withRouter} from 'react-router-dom'
 import { Card} from 'semantic-ui-react'
 
 import NavFloat from './NavFloat'
